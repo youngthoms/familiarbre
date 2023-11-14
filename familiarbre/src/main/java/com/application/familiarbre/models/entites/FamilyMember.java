@@ -1,49 +1,36 @@
-package com.application.familiarbre.entites;
+package com.application.familiarbre.models.entites;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
+import jakarta.persistence.Table;
 
 import java.io.Serializable;
 import java.sql.Date;
 
 @Entity
-public class User implements Serializable {
+@Table(name = "family_members")
+public class FamilyMember implements Serializable {
     @Id
     @GeneratedValue
     private Long id;
-    private String socialSecurityNumber;
     private String name;
     private String firstName;
-    private String email;
     private Date birthDay;
     private Date deathDay;
 
-    @Override
-    public String toString() {
-        return "";
-    }
+    public FamilyMember() { super(); }
 
-    public User() {
+    public FamilyMember(String firstName, String name, Date birthDay, Date deathDay) {
         super();
-    }
-
-    public User(String socialSecurityNumber, String name, String firstName, String email, Date birthDay, Date deathDay) {
-        super();
-        this.socialSecurityNumber = socialSecurityNumber;
-        this.name = name;
         this.firstName = firstName;
-        this.email = email;
+        this.name = name;
         this.birthDay = birthDay;
         this.deathDay = deathDay;
     }
 
     public Long getId() {
         return id;
-    }
-
-    public String getSocialSecurityNumber() {
-        return socialSecurityNumber;
     }
 
     public String getName() {
@@ -56,10 +43,6 @@ public class User implements Serializable {
 
     public String getFullName() {
         return getFirstName() + " " + getName();
-    }
-
-    public String getEmail() {
-        return email;
     }
 
     public Date getBirthDay() {
