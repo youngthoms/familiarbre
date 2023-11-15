@@ -1,35 +1,35 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import { BrowserRouter as Router, Routes, Route, Link, useLocation } from 'react-router-dom';
+import './App.css';
+import RegisterForm from "./features/Registration/components/RegisterForm.tsx";
+
+const NavigationLinks = () => {
+    const location = useLocation();
+
+    // Affiche les liens uniquement si l'utilisateur n'est pas sur les pages d'inscription ou de connexion
+    if (location.pathname === '/register' || location.pathname === '/login') {
+        return null;
+    }
+
+    return (
+        <nav>
+            <Link to="/register">S'inscrire</Link>
+            <Link to="/login">Se connecter</Link>
+        </nav>
+    );
+};
 
 function App() {
-  const [count, setCount] = useState(0)
-
-  return (
-    <>
-      <div>
-        <a href="https://vitejs.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
-  )
+    return (
+        <Router>
+            <div>
+                <NavigationLinks />
+                <Routes>
+                    <Route path="/register" element={<RegisterForm />} />
+                    {/* Ajoute ici la route vers ton composant de connexion */}
+                </Routes>
+            </div>
+        </Router>
+    );
 }
 
-export default App
+export default App;
