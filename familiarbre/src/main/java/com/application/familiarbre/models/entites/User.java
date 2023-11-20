@@ -15,6 +15,7 @@ public class User implements Serializable {
     private Long id;
     private String socialSecurityNumber;
     private String email;
+    private String password;
 
     @Override
     public String toString() {
@@ -25,10 +26,11 @@ public class User implements Serializable {
         super();
     }
 
-    public User(String socialSecurityNumber, String email) {
+    public User(String socialSecurityNumber, String email, String password) {
         super();
         this.socialSecurityNumber = socialSecurityNumber;
         this.email = email;
+        this.password = password;
     }
 
     public Long getId() {
@@ -41,5 +43,21 @@ public class User implements Serializable {
 
     public String getEmail() {
         return email;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setSocialSecurityNumber(String socialSecurityNumber) {
+        this.socialSecurityNumber = socialSecurityNumber;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
     }
 }
