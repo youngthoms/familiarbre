@@ -28,11 +28,4 @@ public class UserController {
 
         return users;
     }
-
-    @PostMapping("/register")
-    public ResponseEntity<?> registerUser(@RequestBody User user) {
-        User savedUser = userService.saveUser(user);
-        return new ResponseEntity<>(savedUser, HttpStatus.CREATED);
-    }
-
 }
