@@ -23,26 +23,12 @@ public class User implements UserDetails {
 
     @Enumerated(EnumType.STRING)
     private Role role;
-    private String firstName;
-    private String lastName;
-    private String socialSecurityNumber;
     private String email;
     private String password;
-
-    @OneToOne
-    @JoinColumn(name = "family_member_id")
-    private FamilyMember familyMember;
 
     @Override
     public String toString() {
         return "";
-    }
-
-    public User(String email, String socialSecurityNumber, String password) {
-        super();
-        this.email = email;
-        this.socialSecurityNumber = socialSecurityNumber;
-        this.password = password;
     }
 
     @Override
