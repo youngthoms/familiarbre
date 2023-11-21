@@ -16,6 +16,11 @@ public class AuthenticationController {
 
     private final AuthenticationService service;
 
+    @GetMapping
+    public ResponseEntity<String> ping() {
+        return ResponseEntity.ok("ping pong");
+    }
+
     @PostMapping("/register")
     public ResponseEntity<AuthenticationResponse> register(
             @RequestBody RegisterRequest request
