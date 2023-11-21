@@ -1,6 +1,5 @@
 package com.application.familiarbre.config;
 
-import jakarta.servlet.Filter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -13,8 +12,6 @@ import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
-import static org.springframework.http.HttpMethod.*;
-import static org.springframework.http.HttpMethod.DELETE;
 
 @Configuration
 @EnableWebSecurity
@@ -24,6 +21,7 @@ public class SecurityConfiguration {
     private final JwtAuthenticationFilter jwtAuthFilter;
     private final AuthenticationProvider authenticationProvider;
     private static final AntPathRequestMatcher[] WHITE_LIST_URL = {
+            new AntPathRequestMatcher("/"),
             new AntPathRequestMatcher("/api/auth/**"),
             new AntPathRequestMatcher("/v2/api-docs"),
             new AntPathRequestMatcher("/v3/api-docs"),
