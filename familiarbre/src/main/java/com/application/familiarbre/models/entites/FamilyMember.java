@@ -1,52 +1,37 @@
 package com.application.familiarbre.models.entites;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
+import lombok.*;
 
 import java.io.Serializable;
 import java.sql.Date;
 
+@Data
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
+@Getter
+@Setter
+@EqualsAndHashCode
 @Entity
 @Table(name = "family_members")
 public class FamilyMember implements Serializable {
     @Id
     @GeneratedValue
     private Long id;
-    private String name;
+
     private String firstName;
+    private String lastName;
     private Date birthDay;
     private Date deathDay;
+    private String socialSecurityNumber;
 
-    public FamilyMember() { super(); }
-
-    public FamilyMember(String firstName, String name, Date birthDay, Date deathDay) {
-        super();
-        this.firstName = firstName;
-        this.name = name;
-        this.birthDay = birthDay;
-        this.deathDay = deathDay;
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public String getFirstName() {
-        return firstName;
-    }
+    @OneToOne
+    @JoinColumn(name = "user_id")
+    private User user;
 
     public String getFullName() {
-        return getFirstName() + " " + getName();
-    }
-
-    public Date getBirthDay() {
-        return birthDay;
+        return getFirstName() + " " + getLastName();
     }
 
     public Date getDeathDay() {
