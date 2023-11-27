@@ -1,12 +1,13 @@
 import { BrowserRouter as Router, Routes, Route, Link, useLocation } from 'react-router-dom';
 import './App.css';
 import RegisterForm from "./features/Registration/components/RegisterForm.tsx";
+import PersonalTreeComponent from "./features/PersonalTree/components/PersonalTree.component.tsx";
+import LoginForm from "./features/SignIn/components/LoginForm.tsx";
 
 const NavigationLinks = () => {
     const location = useLocation();
 
-    // Affiche les liens uniquement si l'utilisateur n'est pas sur les pages d'inscription ou de connexion
-    if (location.pathname === '/register' || location.pathname === '/login') {
+    if (location.pathname !== '/') {
         return null;
     }
 
@@ -25,6 +26,8 @@ function App() {
                 <NavigationLinks />
                 <Routes>
                     <Route path="/register" element={<RegisterForm />} />
+                    <Route path="/login" element={<LoginForm />} />
+                    <Route path="/personaltree" element={<PersonalTreeComponent />} />
                     {/* Ajoute ici la route vers ton composant de connexion */}
                 </Routes>
             </div>
