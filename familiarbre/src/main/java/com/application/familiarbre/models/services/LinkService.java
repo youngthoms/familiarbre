@@ -9,9 +9,10 @@ import java.util.Optional;
 
 public class LinkService {
     private LinkRepository linkRepository;
-
     public Optional<Link> getParents (FamilyMember familyMember){
-        return linkRepository.findByChild(familyMember);
+        if (linkRepository.findByChild(familyMember).isPresent()) {
+            return linkRepository.findByChild(familyMember);
+        }
+        return null;
     }
-
 }

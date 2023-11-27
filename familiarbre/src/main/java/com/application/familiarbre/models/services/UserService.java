@@ -1,6 +1,7 @@
 package com.application.familiarbre.models.services;
 
 import com.application.familiarbre.models.dao.UserRepository;
+import com.application.familiarbre.models.entites.Link;
 import com.application.familiarbre.models.entites.User;
 import lombok.AllArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetails;
