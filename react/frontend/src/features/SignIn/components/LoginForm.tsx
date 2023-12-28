@@ -1,19 +1,18 @@
 import { Button, Form, Input } from 'antd';
-import useRegister from "../hooks/useRegister.ts";
+import useLogin from "../hooks/useLogin.ts"; // Assurez-vous que ce hook est bien défini pour la gestion de la connexion
 
-const RegisterForm = () => {
+const LoginForm = () => {
     const [form] = Form.useForm();
-    const { signUp, isLoading, error } = useRegister();
-
+    const { signIn, isLoading, error } = useLogin(); // Utilisez le hook de connexion ici
 
     const onFinish = async (values: any) => {
         console.log('Received values of form:', values);
-        await signUp(values);
-        console.log('its good')
+        await signIn(values); // Appel de la fonction de connexion au lieu de signUp
+        console.log('Login successful');
     };
 
     return (
-        <Form form={form} name="register" onFinish={onFinish} scrollToFirstError>
+        <Form form={form} name="login" onFinish={onFinish} scrollToFirstError>
             <Form.Item
                 name="email"
                 label="Email"
@@ -42,15 +41,12 @@ const RegisterForm = () => {
                 ]}
                 hasFeedback
             >
-                <Input
-                       type="password"
-                       autoComplete="off"
-                />
+                <Input.Password autoComplete="off" />
             </Form.Item>
 
             <Form.Item>
                 <Button type="primary" htmlType="submit" loading={isLoading}>
-                    Register
+                    Login
                 </Button>
             </Form.Item>
             {error && <p style={{ color: 'red' }}>{error}</p>}
@@ -58,4 +54,4 @@ const RegisterForm = () => {
     );
 };
 
-export default RegisterForm;
+export default LoginForm;
