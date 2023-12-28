@@ -1,5 +1,6 @@
 package com.application.familiarbre.models.entites;
 
+import io.swagger.v3.core.util.Json;
 import jakarta.persistence.*;
 import lombok.*;
 import org.springframework.security.core.GrantedAuthority;
@@ -67,4 +68,5 @@ public class User implements UserDetails {
     public boolean isEnabled() {
         return true;
     }
+
 }

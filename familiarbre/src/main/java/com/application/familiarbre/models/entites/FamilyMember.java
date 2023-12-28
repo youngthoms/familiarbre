@@ -2,9 +2,11 @@ package com.application.familiarbre.models.entites;
 
 import jakarta.persistence.*;
 import lombok.*;
+import netscape.javascript.JSObject;
 
 import java.io.Serializable;
 import java.sql.Date;
+import java.util.List;
 
 @Data
 @Builder
@@ -19,17 +21,21 @@ public class FamilyMember implements Serializable {
     @Id
     @GeneratedValue
     private Long id;
-
     private String firstName;
     private String lastName;
     private Date birthDay;
     private Date deathDay;
     private String socialSecurityNumber;
-
+    private Status status;
     @OneToOne
     @JoinColumn(name = "user_id")
     private User user;
-
+    @ManyToOne
+    @JoinColumn(name = "dad_id")
+    private FamilyMember dad;
+    @ManyToOne
+    @JoinColumn(name = "mom_id")
+    private FamilyMember mom;
     public String getFullName() {
         return getFirstName() + " " + getLastName();
     }
@@ -40,4 +46,5 @@ public class FamilyMember implements Serializable {
         }
         return null;
     }
+
 }
