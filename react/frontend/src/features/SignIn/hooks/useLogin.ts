@@ -12,7 +12,7 @@ const useLogin = () => {
     const signIn = async (formData: SignInFormData) => {
         setIsLoading(true);
         try {
-            const response = await fetch(`${import.meta.env.VITE_BASE_URL}/api/users`, {
+            const response = await fetch(`${import.meta.env.VITE_BASE_URL}/api/auth/authenticate`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -22,7 +22,7 @@ const useLogin = () => {
             if (!response.ok) {
                 throw new Error('Failed to login');
             }
-            // Gestion de la réponse de succès ici
+            console.log("tudo bem");
         } catch (err) {
             // @ts-ignore
             setError(err.message);

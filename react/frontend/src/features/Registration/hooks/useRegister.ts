@@ -13,7 +13,7 @@ const useRegister = () => {
     const signUp = async (formData: SignUpFormData) => {
         setIsLoading(true);
         try {
-            const response = await fetch(`${import.meta.env.VITE_BASE_URL}/api/users/register`, {
+            const response = await fetch(`${import.meta.env.VITE_BASE_URL}/api/auth/register`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
