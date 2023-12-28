@@ -36,16 +36,33 @@ public class FamilyMemberService {
          }
     }
 
-    public void childList(FamilyMember familyMember, List<FamilyMember> familiyTree){
+    public void childList(FamilyMember currentUser,FamilyMember familyMember, List<FamilyMember> familiyTree){
         for (FamilyMember familyMember1 : getAll()){
             if(familyMember==familyMember1.getDad()){
-                familiyTree.add(familyMember1);
-                childList(familyMember1.getDad(),familiyTree);
+                if(familyMember1.getDad().getStatus()==Status.PRIVATE && familyMember1.getDad()==currentUser){
+                    familiyTree.add(familyMember1);
+                    childList(currentUser,familyMember1.getDad(),familiyTree);
+                } else if (familyMember1.getDad().getStatus()==Status.PUBLIC) {
+                    familiyTree.add(familyMember1);
+                    childList(currentUser,familyMember1.getDad(),familiyTree);
+                } else if (familyMember1.getDad().getStatus()==Status.PROTECTED && isInFamilyTree(currentUser,familyMember1.getDad()) ) {
+                    familiyTree.add(familyMember1);
+                    childList(currentUser,familyMember1.getDad(),familiyTree);
+                }
             }
-            if(familyMember1.getMom()==familyMember){
-                familiyTree.add(familyMember1);
-                childList(familyMember1.getMom(),familiyTree);
+            if(familyMember == familyMember1.getMom()){
+                if(familyMember1.getMom().getStatus() == Status.PRIVATE && familyMember1.getMom() == currentUser){
+                    familiyTree.add(familyMember1);
+                    childList(currentUser, familyMember1.getMom(), familiyTree);
+                } else if (familyMember1.getMom().getStatus() == Status.PUBLIC) {
+                    familiyTree.add(familyMember1);
+                    childList(currentUser, familyMember1.getMom(), familiyTree);
+                } else if (familyMember1.getMom().getStatus() == Status.PROTECTED && isInFamilyTree(currentUser, familyMember1.getMom())) {
+                    familiyTree.add(familyMember1);
+                    childList(currentUser, familyMember1.getMom(), familiyTree);
+                }
             }
+
         }
     }
 
