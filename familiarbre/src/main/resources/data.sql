@@ -1,4 +1,3 @@
-DELETE FROM link;
 DELETE FROM family_members;
 DELETE FROM users;
 
@@ -27,9 +26,3 @@ INSERT INTO family_members (id, birth_day, death_day, first_name, last_name, soc
     (8, '12-07-1980', '15-01-2023', 'Olivia', 'Clark', '4567890123'),
     (9, '03-04-1978', NULL, 'James', 'Davis', '8901234567'),
     (10, '22-10-1992', NULL, 'Lily', 'Moore', '3456789012');
-
-INSERT INTO link(id,child_id,dad_id,mom_id) VALUES
-   (1, 2, 1, 6),
-   (2, 4, 3, 5),
-   (3, 8, 7, 2),
-   (4, 10, 9, 8);

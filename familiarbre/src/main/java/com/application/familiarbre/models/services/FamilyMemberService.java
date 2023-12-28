@@ -36,7 +36,20 @@ public class FamilyMemberService {
          }
     }
 
-    public boolean rightToSee(FamilyMember currentUser,FamilyMember reachUser){
+    public void childList(FamilyMember familyMember, List<FamilyMember> familiyTree){
+        for (FamilyMember familyMember1 : getAll()){
+            if(familyMember==familyMember1.getDad()){
+                familiyTree.add(familyMember1);
+                childList(familyMember1.getDad(),familiyTree);
+            }
+            if(familyMember1.getMom()==familyMember){
+                familiyTree.add(familyMember1);
+                childList(familyMember1.getMom(),familiyTree);
+            }
+        }
+    }
+
+    public boolean rightToSeeParents(FamilyMember currentUser,FamilyMember reachUser){
         if (reachUser.getStatus()== Status.PRIVATE){
             if(currentUser==reachUser){
                 return true;
