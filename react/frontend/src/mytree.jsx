@@ -1,26 +1,19 @@
-import { useRef, useEffect } from 'react';
-import FamilyTree from "@balkangraph/familytree.js";
+import React, { useRef, useEffect } from 'react';
+import FamilyTree from '@balkangraph/familytree.js';
 
-export default function Chart({ nodes }) {
-    const divRef = useRef(null);
-    const familyRef = useRef(null);
+function MyTree({ nodes }) {
+    const treeRef = useRef(null);
+    const familyRef = useRef(null); // Assurez-vous de définir familyRef ici
+
 
     useEffect(() => {
-        const transformedNodes = nodes.map(member => ({
-            id: member.id,
-            pids: member.spouse ? [member.spouse] : [],
-            mid: member.parents && member.parents[0],
-            fid: member.parents && member.parents[1],
-            name: member.firstname + ' ' + (member.lastname || ''),
-            img: member.img
-        }));
-
-        familyRef.current = new FamilyTree(divRef.current, {
-            nodes: transformedNodes,
+        const tree = new FamilyTree(treeRef.current, {
+            nodeTreeMenu: true,
             nodeBinding: {
                 field_0: 'name',
                 img_0: 'img'
-            }
+            },
+            nodes: nodes
         });
 
         return () => {
@@ -28,8 +21,9 @@ export default function Chart({ nodes }) {
                 familyRef.current.destroy();
             }
         };
-    }, [nodes]);
+    }, [nodes]); // Depend on nodes so it updates when nodes change
 
-    return <div ref={divRef}></div>;
+    return <div ref={treeRef} style={{ width: '100%', height: '500px' }} />;
 }
-//onupdatenode
+
+export default MyTree;

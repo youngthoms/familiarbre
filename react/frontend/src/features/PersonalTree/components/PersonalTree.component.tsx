@@ -1,4 +1,4 @@
-import React, {useRef, useState} from 'react';
+import React, {useState} from 'react';
 import {
     AppstoreOutlined,
     BarChartOutlined,
@@ -17,8 +17,7 @@ import {
     StyledHeader, StyledLayout,
     StyledSider
 } from "./PersonalTree.style.tsx";
-import FamilyTree from "@balkangraph/familytree.js";
-
+import MyTree from "../../../mytree.jsx";
 
 const items: MenuProps['items'] = [
     UserOutlined,
@@ -36,22 +35,17 @@ const items: MenuProps['items'] = [
 }));
 
 export const PersonalTree: React.FC = (): JSX.Element => {
+    // const [nodes, setNodes] = useState<TreeNode[]>([]);
     const [showTree, setShowTree] = useState(false);
-    const treeDivRef = useRef(null);
-
+    // const treeDivRef = useRef(null);
+    const nodes = [
+        { id: 1, pids: [2], name: "Amber McKenzie", gender: "female" },
+        { id: 2, pids: [1], name: "Ava Field", gender: "male" },
+        { id: 3, mid: 1, fid: 2, name: "Peter Stevens", gender: "male" }
+    ];
     const createTree = () => {
+        //setNodes([{ id: "1", name: "Racine" }]);  // Ajoutez un nœud racine à l'arbre
         setShowTree(true);
-        setTimeout(() => {
-            if (treeDivRef.current) {
-                new FamilyTree(treeDivRef.current, {
-                    nodes: [], // Commence avec un tableau vide
-                    nodeBinding: {
-                        field_0: 'name',
-                        img_0: 'img'
-                    }
-                });
-            }
-        }, 0);
     };
     return (
         <Layout hasSider>
@@ -64,7 +58,9 @@ export const PersonalTree: React.FC = (): JSX.Element => {
                 <StyledContent>
                     <ContentContainer>
                         <Button type="primary" onClick={createTree}>Créer un arbre</Button>
-                        {showTree && <div ref={treeDivRef} style={{ height: '500px', width: '100%' }}></div>}
+                        {showTree && <div style={{ height: "100%" }}>
+                            <MyTree nodes={nodes} />
+                        </div>}
                     </ContentContainer>
                 </StyledContent>
             </StyledLayout>
