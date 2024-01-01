@@ -26,6 +26,8 @@ public class User implements UserDetails {
     private String email;
     private String password;
 
+    @OneToMany(mappedBy = "user")
+    private List<Token> tokens;
     @Override
     public String toString() {
         return "";
