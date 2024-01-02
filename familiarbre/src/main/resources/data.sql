@@ -26,3 +26,6 @@ INSERT INTO family_members (id, birth_day, death_day, first_name, last_name, soc
     (8, '12-07-1980', '15-01-2023', 'Olivia', 'Clark', '4567890123'),
     (9, '03-04-1978', NULL, 'James', 'Davis', '8901234567'),
     (10, '22-10-1992', NULL, 'Lily', 'Moore', '3456789012');
+
+INSERT INTO is_maried(id,man_id,women_id) VALUES
+    (1,9,10);
