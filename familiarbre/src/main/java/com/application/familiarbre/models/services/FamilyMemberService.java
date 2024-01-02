@@ -3,12 +3,14 @@ package com.application.familiarbre.models.services;
 import com.application.familiarbre.models.dao.FamilyMemberRepository;
 import com.application.familiarbre.models.entites.FamilyMember;
 import com.application.familiarbre.models.entites.Status;
+import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
 
 @Service
+@AllArgsConstructor
 public class FamilyMemberService {
     private FamilyMemberRepository repository;
 
@@ -37,20 +39,20 @@ public class FamilyMemberService {
          if(familyMember != null){
              familyTree.add(familyMember);
              if (familyMember.getMom()!=null){
-                 if(familyMember.getMom().getStatus() == Status.PRIVATE && familyMember.getMom() == currentUser){
+                 if((familyMember.getMom().getStatus() == Status.PRIVATE | familyMember.getMom().getStatus()==null )&& familyMember.getMom() == currentUser){
                      getParentsList(currentUser, familyMember.getMom(), familyTree);
                  } else if (familyMember.getMom().getStatus() == Status.PUBLIC) {
                      getParentsList(currentUser, familyMember.getMom(), familyTree);
-                 } else if (familyMember.getMom().getStatus() == Status.PROTECTED && isInFamilyTree(currentUser, familyMember.getMom())) {
+                 } else if (familyMember.getMom().getStatus() == Status.PROTECTED && (isInFamilyTree(currentUser, familyMember.getMom())|isInFamilyTree(familyMember.getMom(),currentUser))) {
                      getParentsList(currentUser, familyMember.getMom(), familyTree);
                  }
              }
              if (familyMember.getDad()!=null){
-                 if (familyMember.getDad().getStatus() == Status.PRIVATE && familyMember.getDad() == currentUser) {
+                 if ((familyMember.getDad().getStatus() == Status.PRIVATE| familyMember.getDad().getStatus()==null ) && familyMember.getDad() == currentUser) {
                      getParentsList(currentUser, familyMember.getDad(), familyTree);
                  } else if (familyMember.getDad().getStatus() == Status.PUBLIC) {
                      getParentsList(currentUser, familyMember.getDad(), familyTree);
-                 } else if (familyMember.getDad().getStatus() == Status.PROTECTED && isInFamilyTree(currentUser, familyMember.getDad())) {
+                 } else if (familyMember.getDad().getStatus() == Status.PROTECTED && (isInFamilyTree(currentUser, familyMember.getDad())|isInFamilyTree(familyMember.getDad(),currentUser)) ){
                      getParentsList(currentUser, familyMember.getDad(), familyTree);
                  }
              }
@@ -70,36 +72,18 @@ public class FamilyMemberService {
     }
 
     private void addChild(FamilyMember currentUser, List<FamilyMember> familyTree, FamilyMember familyMember1) {
-        if(familyMember1.getStatus() == Status.PRIVATE && familyMember1 == currentUser){
+        if((familyMember1.getStatus() == Status.PRIVATE | familyMember1.getStatus()==null ) && familyMember1 == currentUser){
             familyTree.add(familyMember1);
             getChildList(currentUser, familyMember1, familyTree);
         } else if (familyMember1.getStatus() == Status.PUBLIC) {
             familyTree.add(familyMember1);
             getChildList(currentUser, familyMember1, familyTree);
-        } else if (familyMember1.getStatus() == Status.PROTECTED && isInFamilyTree(currentUser, familyMember1)) {
+        } else if (familyMember1.getStatus() == Status.PROTECTED && (isInFamilyTree(currentUser, familyMember1)) | isInFamilyTree(familyMember1,currentUser)){
             familyTree.add(familyMember1);
             getChildList(currentUser, familyMember1, familyTree);
         }
     }
 
-    public boolean rightToSeeParents(FamilyMember currentUser,FamilyMember reachUser){
-        if (reachUser.getStatus()== Status.PRIVATE){
-            if(currentUser==reachUser){
-                return true;
-            }
-            return false;
-        }
-        else if (reachUser.getStatus()==Status.PUBLIC){
-            return true;
-        }
-        else if(reachUser.getStatus()==Status.PROTECTED){
-            return isInFamilyTree(currentUser, reachUser);
-        }
-        else{
-            return false;
-        }
-
-    }
 
     public boolean isInFamilyTree(FamilyMember user1, FamilyMember user2){
         if(user1==user2){

@@ -26,6 +26,8 @@ public class FamilyMember implements Serializable {
     private Date birthDay;
     private Date deathDay;
     private String socialSecurityNumber;
+
+    @Enumerated(EnumType.STRING)
     private Status status;
     @OneToOne
     @JoinColumn(name = "user_id")

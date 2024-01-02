@@ -1,5 +1,6 @@
 package com.application.familiarbre.config;
 
+import com.application.familiarbre.models.dao.FamilyMemberRepository;
 import com.application.familiarbre.models.dao.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
@@ -18,6 +19,8 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 public class ApplicationConfig {
 
     private final UserRepository userRepository;
+
+    private final FamilyMemberRepository familyMemberRepository;
 
     @Bean
     public UserDetailsService userDetailsService() {

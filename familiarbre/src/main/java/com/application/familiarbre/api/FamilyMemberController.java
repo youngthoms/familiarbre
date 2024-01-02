@@ -24,6 +24,11 @@ public class FamilyMemberController {
         return familyMembers;
     }
 
+    @GetMapping("/tree/{user_id_connected}/{user_id_target}")
+    public List<FamilyMember> getTree(@PathVariable Long user_id_connected,@PathVariable Long user_id_target){
+        return familyMemberService.getFamilyTree(user_id_connected,user_id_target);
+    }
+
     @GetMapping("/id/{id}")
     public FamilyMember byId(@PathVariable Long id) {
         return familyMemberService.getById(id);
