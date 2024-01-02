@@ -22,6 +22,15 @@ const useLogin = () => {
             if (!response.ok) {
                 throw new Error('Failed to login');
             }
+            const { token } = await response.json();  // Extract the token from the response
+            console.log("Token received: ", token);
+
+            // Decode the token
+            const decoded: DecodedToken = jwtDecode(token);
+            console.log("User ID from token: ", decoded.userId);
+
+            // Store the token in localStorage
+            localStorage.setItem('jwtToken', token);
             console.log("tudo bem");
         } catch (err) {
             // @ts-ignore

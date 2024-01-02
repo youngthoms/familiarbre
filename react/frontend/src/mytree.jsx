@@ -15,6 +15,11 @@ function MyTree({ nodes }) {
             },
             nodes: nodes
         });
+        // console.log(nodes);
+        tree.onUpdateNode((args) => {
+            console.log(args.addNodesData);
+            console.log(args.updateNodesData);
+        });
 
         return () => {
             if (familyRef.current) {

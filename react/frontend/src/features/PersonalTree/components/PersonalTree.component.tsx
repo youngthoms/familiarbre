@@ -39,14 +39,13 @@ export const PersonalTree: React.FC = (): JSX.Element => {
     const [showTree, setShowTree] = useState(false);
     // const treeDivRef = useRef(null);
     const nodes = [
-        { id: 1, pids: [2], name: "Amber McKenzie", gender: "female" },
-        { id: 2, pids: [1], name: "Ava Field", gender: "male" },
-        { id: 3, mid: 1, fid: 2, name: "Peter Stevens", gender: "male" }
+        { id: 1, name: "Amber McKenzie", gender: "female" }
     ];
     const createTree = () => {
         //setNodes([{ id: "1", name: "Racine" }]);  // Ajoutez un nœud racine à l'arbre
         setShowTree(true);
     };
+
     return (
         <Layout hasSider>
             <StyledSider>
