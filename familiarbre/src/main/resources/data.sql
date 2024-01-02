@@ -1,4 +1,4 @@
-DELETE FROM is_maried;
+DELETE FROM token;
 DELETE FROM family_members;
 DELETE FROM users;
 
@@ -28,15 +28,7 @@ INSERT INTO family_members (id, birth_day, death_day, first_name, last_name, soc
     (9, '03-04-1978', NULL, 'James', 'Davis', '8901234567'),
     (10, '22-10-1992', NULL, 'Lily', 'Moore', '3456789012');
 
-INSERT INTO family_members (id, birth_day, death_day, first_name, last_name, social_security_number, mom_id, dad_id,status) VALUES
-                 (11, '15-05-1990', NULL, 'Michael', 'Johnson', '9012345678', 12, 13,'PROTECTED'),
-                 (12, '02-12-1985', '20-07-2022', 'Sarah', 'Anderson', '0123456789', NULL, NULL,'PROTECTED'),
-                 (13, '08-09-1970', NULL, 'Robert', 'Smith', '9876543210', NULL, NULL,'PROTECTED');
-
-
-
-
-
-
-INSERT INTO is_maried(id,man_id,women_id) VALUES
-    (1,9,10);
+INSERT INTO family_members (id, birth_day, death_day, first_name, last_name, social_security_number, mom_id, dad_id,status,maried_id) VALUES
+                 (11, '15-05-1990', NULL, 'Michael', 'Johnson', '9012345678', 12, 13,'PROTECTED',null),
+                 (12, '02-12-1985', '20-07-2022', 'Sarah', 'Anderson', '0123456789', NULL, NULL,'PROTECTED',13),
+                 (13, '08-09-1970', NULL, 'Robert', 'Smith', '9876543210', NULL, NULL,'PROTECTED',12);
