@@ -1,3 +1,4 @@
+DELETE FROM is_maried;
 DELETE FROM family_members;
 DELETE FROM users;
 
