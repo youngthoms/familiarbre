@@ -1,6 +1,7 @@
 package com.application.familiarbre.api;
 
 import com.application.familiarbre.models.entites.FamilyMember;
+import com.application.familiarbre.models.entites.Node;
 import com.application.familiarbre.models.services.FamilyMemberService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.ui.Model;
@@ -25,7 +26,7 @@ public class FamilyMemberController {
     }
 
     @GetMapping("/tree/{user_id_connected}/{user_id_target}")
-    public List<FamilyMember> getTree(@PathVariable Long user_id_connected,@PathVariable Long user_id_target){
+    public List<Node> getTree(@PathVariable Long user_id_connected, @PathVariable Long user_id_target){
         return familyMemberService.getFamilyTree(user_id_connected,user_id_target);
     }
 

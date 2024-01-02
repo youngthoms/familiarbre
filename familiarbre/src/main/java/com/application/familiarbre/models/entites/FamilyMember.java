@@ -7,6 +7,7 @@ import netscape.javascript.JSObject;
 import java.io.Serializable;
 import java.sql.Date;
 import java.util.List;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 @Data
 @Builder
@@ -25,8 +26,14 @@ public class FamilyMember implements Serializable {
     private String lastName;
     private Date birthDay;
     private Date deathDay;
+    @ManyToOne
+    @JoinColumn(name = "maried_id")
+    private FamilyMember maried;
+    @OneToMany(mappedBy = "maried")
+    List<FamilyMember> pids;
     private String socialSecurityNumber;
-
+    @Enumerated(EnumType.STRING)
+    private Gender gender;
     @Enumerated(EnumType.STRING)
     private Status status;
     @OneToOne
@@ -34,10 +41,10 @@ public class FamilyMember implements Serializable {
     private User user;
     @ManyToOne
     @JoinColumn(name = "dad_id")
-    private FamilyMember dad;
+    private FamilyMember fid;
     @ManyToOne
     @JoinColumn(name = "mom_id")
-    private FamilyMember mom;
+    private FamilyMember mid;
     public String getFullName() {
         return getFirstName() + " " + getLastName();
     }

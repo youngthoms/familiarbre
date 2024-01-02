@@ -2,6 +2,7 @@ package com.application.familiarbre.models.services;
 
 import com.application.familiarbre.models.dao.FamilyMemberRepository;
 import com.application.familiarbre.models.entites.FamilyMember;
+import com.application.familiarbre.models.entites.Node;
 import com.application.familiarbre.models.entites.Status;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -25,35 +26,50 @@ public class FamilyMemberService {
     public FamilyMember getById(Long id) {
         return repository.findById(id).orElseThrow();
     }
-    public List<FamilyMember> getFamilyTree(long idCurrentUser,long idUserTarget){
+    public List<Node> getFamilyTree(long idCurrentUser, long idUserTarget){
         return getFamilyTree(getById(idCurrentUser),getById(idUserTarget));
     }
-    public List<FamilyMember> getFamilyTree(FamilyMember currentUser,FamilyMember familyMember){
+    public List<Node> getFamilyTree(FamilyMember currentUser,FamilyMember familyMember){
         List<FamilyMember> familyTree=new ArrayList<FamilyMember>();
         getParentsList(currentUser,familyMember,familyTree);
         getChildList(currentUser,familyMember,familyTree);
-        return familyTree;
+        List<Node> tree = new ArrayList<>();
+        for (FamilyMember i : familyTree) {
+            Long midId = (i.getMid() != null) ? i.getMid().getId() : null;
+            Long fidId = (i.getFid() != null) ? i.getFid().getId() : null;
+
+            List<Long> pids = new ArrayList<>();
+            for (FamilyMember j : i.getPids()) {
+                pids.add(j.getId());
+            }
+            Long[] pidsArray = pids.toArray(new Long[0]);
+
+            tree.add(new Node(i.getId(), midId, pidsArray, fidId, i.getFullName(), i.getGender()));
+        }
+        return tree;
+
+
     }
 
     public void getParentsList (FamilyMember currentUser, FamilyMember familyMember, List<FamilyMember> familyTree){
          if(familyMember != null){
              familyTree.add(familyMember);
-             if (familyMember.getMom()!=null){
-                 if((familyMember.getMom().getStatus() == Status.PRIVATE | familyMember.getMom().getStatus()==null )&& familyMember.getMom() == currentUser){
-                     getParentsList(currentUser, familyMember.getMom(), familyTree);
-                 } else if (familyMember.getMom().getStatus() == Status.PUBLIC) {
-                     getParentsList(currentUser, familyMember.getMom(), familyTree);
-                 } else if (familyMember.getMom().getStatus() == Status.PROTECTED && (isInFamilyTree(currentUser, familyMember.getMom())|isInFamilyTree(familyMember.getMom(),currentUser))) {
-                     getParentsList(currentUser, familyMember.getMom(), familyTree);
+             if (familyMember.getMid()!=null){
+                 if((familyMember.getMid().getStatus() == Status.PRIVATE | familyMember.getMid().getStatus()==null )&& familyMember.getMid() == currentUser){
+                     getParentsList(currentUser, familyMember.getMid(), familyTree);
+                 } else if (familyMember.getMid().getStatus() == Status.PUBLIC) {
+                     getParentsList(currentUser, familyMember.getMid(), familyTree);
+                 } else if (familyMember.getMid().getStatus() == Status.PROTECTED && (isInFamilyTree(currentUser, familyMember.getMid())|isInFamilyTree(familyMember.getMid(),currentUser))) {
+                     getParentsList(currentUser, familyMember.getMid(), familyTree);
                  }
              }
-             if (familyMember.getDad()!=null){
-                 if ((familyMember.getDad().getStatus() == Status.PRIVATE| familyMember.getDad().getStatus()==null ) && familyMember.getDad() == currentUser) {
-                     getParentsList(currentUser, familyMember.getDad(), familyTree);
-                 } else if (familyMember.getDad().getStatus() == Status.PUBLIC) {
-                     getParentsList(currentUser, familyMember.getDad(), familyTree);
-                 } else if (familyMember.getDad().getStatus() == Status.PROTECTED && (isInFamilyTree(currentUser, familyMember.getDad())|isInFamilyTree(familyMember.getDad(),currentUser)) ){
-                     getParentsList(currentUser, familyMember.getDad(), familyTree);
+             if (familyMember.getFid()!=null){
+                 if ((familyMember.getFid().getStatus() == Status.PRIVATE| familyMember.getFid().getStatus()==null ) && familyMember.getFid() == currentUser) {
+                     getParentsList(currentUser, familyMember.getFid(), familyTree);
+                 } else if (familyMember.getFid().getStatus() == Status.PUBLIC) {
+                     getParentsList(currentUser, familyMember.getFid(), familyTree);
+                 } else if (familyMember.getFid().getStatus() == Status.PROTECTED && (isInFamilyTree(currentUser, familyMember.getFid())|isInFamilyTree(familyMember.getFid(),currentUser)) ){
+                     getParentsList(currentUser, familyMember.getFid(), familyTree);
                  }
              }
          }
@@ -61,10 +77,10 @@ public class FamilyMemberService {
 
     public void getChildList(FamilyMember currentUser,FamilyMember familyMember, List<FamilyMember> familyTree){
         for (FamilyMember familyMember1 : getAll()){
-            if(familyMember==familyMember1.getDad()){
+            if(familyMember==familyMember1.getFid()){
                 addChild(currentUser, familyTree, familyMember1);
             }
-            if(familyMember == familyMember1.getMom()){
+            if(familyMember == familyMember1.getMid()){
                 addChild(currentUser, familyTree, familyMember1);
             }
 
@@ -93,11 +109,11 @@ public class FamilyMemberService {
             boolean momResult = false;
             boolean dadResult = false;
 
-            if (user2.getMom()!=null){
-                momResult=isInFamilyTree(user1,user2.getMom());
+            if (user2.getMid()!=null){
+                momResult=isInFamilyTree(user1,user2.getMid());
             }
-            if (user2.getDad()!=null) {
-                dadResult=isInFamilyTree(user1, user2.getDad());
+            if (user2.getFid()!=null) {
+                dadResult=isInFamilyTree(user1, user2.getFid());
             }
             return momResult || dadResult;
         }
