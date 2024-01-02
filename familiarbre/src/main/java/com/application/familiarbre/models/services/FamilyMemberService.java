@@ -23,7 +23,9 @@ public class FamilyMemberService {
     public FamilyMember getById(Long id) {
         return repository.findById(id).orElseThrow();
     }
-
+    public List<FamilyMember> getFamilyTree(long idCurrentUser,long idUserTarget){
+        return getFamilyTree(getById(idCurrentUser),getById(idUserTarget));
+    }
     public List<FamilyMember> getFamilyTree(FamilyMember currentUser,FamilyMember familyMember){
         List<FamilyMember> familyTree=new ArrayList<FamilyMember>();
         getParentsList(currentUser,familyMember,familyTree);
