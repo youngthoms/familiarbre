@@ -17,6 +17,7 @@ const useRegister = () => {
     const signUp = async (formData: SignUpFormData) => {
         setIsLoading(true);
         try {
+            //@ts-ignored
             const response = await fetch(`${import.meta.env.VITE_BASE_URL}/api/auth/register`, {
                 method: 'POST',
                 headers: {

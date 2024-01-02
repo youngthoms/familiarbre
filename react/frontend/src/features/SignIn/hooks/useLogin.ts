@@ -12,6 +12,7 @@ const useLogin = () => {
     const signIn = async (formData: SignInFormData) => {
         setIsLoading(true);
         try {
+            //@ts-ignored
             const response = await fetch(`${import.meta.env.VITE_BASE_URL}/api/auth/authenticate`, {
                 method: 'POST',
                 headers: {
@@ -26,8 +27,8 @@ const useLogin = () => {
             console.log("Token received: ", token);
 
             // Decode the token
-            const decoded: DecodedToken = jwtDecode(token);
-            console.log("User ID from token: ", decoded.userId);
+            // const decoded: DecodedToken = jwtDecode(token);
+            // console.log("User ID from token: ", decoded.userId);
 
             // Store the token in localStorage
             localStorage.setItem('jwtToken', token);
