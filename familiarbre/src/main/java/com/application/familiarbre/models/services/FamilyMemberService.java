@@ -28,6 +28,7 @@ public class FamilyMemberService {
         List<FamilyMember> familyTree=new ArrayList<FamilyMember>();
         getParentsList(currentUser,familyMember,familyTree);
         getChildList(currentUser,familyMember,familyTree);
+        return familyTree;
     }
 
     public void getParentsList (FamilyMember currentUser, FamilyMember familyMember, List<FamilyMember> familyTree){
