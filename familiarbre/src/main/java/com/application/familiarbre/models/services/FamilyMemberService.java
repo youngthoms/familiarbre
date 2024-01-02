@@ -24,42 +24,60 @@ public class FamilyMemberService {
         return repository.findById(id).orElseThrow();
     }
 
-    public void getParentsList (FamilyMember familyMember, List<FamilyMember> familyTree){
+    public List<FamilyMember> getFamilyTree(FamilyMember currentUser,FamilyMember familyMember){
+        List<FamilyMember> familyTree=new ArrayList<FamilyMember>();
+        getParentsList(currentUser,familyMember,familyTree);
+        getChildList(currentUser,familyMember,familyTree);
+    }
+
+    public void getParentsList (FamilyMember currentUser, FamilyMember familyMember, List<FamilyMember> familyTree){
          if(familyMember != null){
              familyTree.add(familyMember);
              if (familyMember.getMom()!=null){
-                 getParentsList(familyMember.getMom(),familyTree);
+                 if(familyMember.getMom().getStatus() == Status.PRIVATE && familyMember.getMom() == currentUser){
+                     getParentsList(currentUser, familyMember.getMom(), familyTree);
+                 } else if (familyMember.getMom().getStatus() == Status.PUBLIC) {
+                     getParentsList(currentUser, familyMember.getMom(), familyTree);
+                 } else if (familyMember.getMom().getStatus() == Status.PROTECTED && isInFamilyTree(currentUser, familyMember.getMom())) {
+                     getParentsList(currentUser, familyMember.getMom(), familyTree);
+                 }
              }
              if (familyMember.getDad()!=null){
-                 getParentsList(familyMember.getDad(),familyTree);
+                 if (familyMember.getDad().getStatus() == Status.PRIVATE && familyMember.getDad() == currentUser) {
+                     getParentsList(currentUser, familyMember.getDad(), familyTree);
+                 } else if (familyMember.getDad().getStatus() == Status.PUBLIC) {
+                     getParentsList(currentUser, familyMember.getDad(), familyTree);
+                 } else if (familyMember.getDad().getStatus() == Status.PROTECTED && isInFamilyTree(currentUser, familyMember.getDad())) {
+                     getParentsList(currentUser, familyMember.getDad(), familyTree);
+                 }
              }
          }
     }
 
-    public void getChildList(FamilyMember currentUser,FamilyMember familyMember, List<FamilyMember> familiyTree){
+    public void getChildList(FamilyMember currentUser,FamilyMember familyMember, List<FamilyMember> familyTree){
         for (FamilyMember familyMember1 : getAll()){
             if(familyMember==familyMember1.getDad()){
                 if(familyMember1.getDad().getStatus()==Status.PRIVATE && familyMember1.getDad()==currentUser){
-                    familiyTree.add(familyMember1);
-                    getChildList(currentUser,familyMember1.getDad(),familiyTree);
+                    familyTree.add(familyMember1);
+                    getChildList(currentUser,familyMember1.getDad(),familyTree);
                 } else if (familyMember1.getDad().getStatus()==Status.PUBLIC) {
-                    familiyTree.add(familyMember1);
-                    getChildList(currentUser,familyMember1.getDad(),familiyTree);
+                    familyTree.add(familyMember1);
+                    getChildList(currentUser,familyMember1.getDad(),familyTree);
                 } else if (familyMember1.getDad().getStatus()==Status.PROTECTED && isInFamilyTree(currentUser,familyMember1.getDad()) ) {
-                    familiyTree.add(familyMember1);
-                    getChildList(currentUser,familyMember1.getDad(),familiyTree);
+                    familyTree.add(familyMember1);
+                    getChildList(currentUser,familyMember1.getDad(),familyTree);
                 }
             }
             if(familyMember == familyMember1.getMom()){
                 if(familyMember1.getMom().getStatus() == Status.PRIVATE && familyMember1.getMom() == currentUser){
-                    familiyTree.add(familyMember1);
-                    getChildList(currentUser, familyMember1.getMom(), familiyTree);
+                    familyTree.add(familyMember1);
+                    getChildList(currentUser, familyMember1.getMom(), familyTree);
                 } else if (familyMember1.getMom().getStatus() == Status.PUBLIC) {
-                    familiyTree.add(familyMember1);
-                    getChildList(currentUser, familyMember1.getMom(), familiyTree);
+                    familyTree.add(familyMember1);
+                    getChildList(currentUser, familyMember1.getMom(), familyTree);
                 } else if (familyMember1.getMom().getStatus() == Status.PROTECTED && isInFamilyTree(currentUser, familyMember1.getMom())) {
-                    familiyTree.add(familyMember1);
-                    getChildList(currentUser, familyMember1.getMom(), familiyTree);
+                    familyTree.add(familyMember1);
+                    getChildList(currentUser, familyMember1.getMom(), familyTree);
                 }
             }
 
