@@ -4,11 +4,13 @@ import com.application.familiarbre.models.dao.FamilyMemberRepository;
 import com.application.familiarbre.models.entites.FamilyMember;
 import com.application.familiarbre.models.entites.Node;
 import com.application.familiarbre.models.entites.Status;
+import com.application.familiarbre.models.entites.User;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @AllArgsConstructor
@@ -26,6 +28,21 @@ public class FamilyMemberService {
     public FamilyMember getById(Long id) {
         return repository.findById(id).orElseThrow();
     }
+
+    public Optional<FamilyMember> getByUser(User user) {
+        return repository.findByUser(user);
+    }
+    public List<Node> hasAccess(long idCurrentUser, long idUserTarget){
+        if (getById(idUserTarget).getStatus()==Status.PUBLIC){
+            return getFamilyTree(idCurrentUser, idUserTarget);
+        }
+        else if (getById(idUserTarget).getStatus()==Status.PROTECTED && (isInFamilyTree(getById(idCurrentUser),getById(idCurrentUser))|isInFamilyTree(getById(idUserTarget),getById(idCurrentUser)))){
+            return getFamilyTree(idCurrentUser, idUserTarget);
+        } else if ((getById(idUserTarget).getStatus()==Status.PRIVATE | getById(idUserTarget).getStatus()==null) && idUserTarget==idCurrentUser) {
+            return getFamilyTree(idCurrentUser, idUserTarget);
+        }
+        throw new org.springframework.security.access.AccessDeniedException("403 returned");
+    };
     public List<Node> getFamilyTree(long idCurrentUser, long idUserTarget){
         return getFamilyTree(getById(idCurrentUser),getById(idUserTarget));
     }
