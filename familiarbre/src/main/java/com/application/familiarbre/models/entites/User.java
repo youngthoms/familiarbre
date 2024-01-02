@@ -1,6 +1,6 @@
 package com.application.familiarbre.models.entites;
 
-import io.swagger.v3.core.util.Json;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 import org.springframework.security.core.GrantedAuthority;
@@ -27,6 +27,7 @@ public class User implements UserDetails {
     private String email;
     private String password;
 
+    @JsonIgnore
     @OneToMany(mappedBy = "user")
     private List<Token> tokens;
     @Override
@@ -68,5 +69,4 @@ public class User implements UserDetails {
     public boolean isEnabled() {
         return true;
     }
-
 }

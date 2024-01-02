@@ -24,7 +24,8 @@ public class UserController {
     }
 
     @GetMapping("/id/{id}")
-    public User byId(@PathVariable Long id) {
-        return userService.getById(id);
-    }
+    public User byId(@PathVariable Long id) { return userService.getById(id); }
+
+    @GetMapping("/token/{token}")
+    public User byToken(@PathVariable String token) { return userService.loadUserByToken(token); }
 }
