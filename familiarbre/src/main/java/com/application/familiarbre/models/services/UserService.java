@@ -9,6 +9,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @AllArgsConstructor
@@ -33,5 +34,14 @@ public class UserService implements UserDetailsService {
 
     public User getById(Long id) {
         return userRepository.findById(id).orElseThrow();
+    }
+    public User loadUserByToken(String token) {
+        Optional<User> user = userRepository.findByToken(token);
+
+        if (user.isPresent()) {
+            return user.get();
+        } else {
+            throw new UsernameNotFoundException("User not found for the token");
+        }
     }
 }
