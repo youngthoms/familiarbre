@@ -1,5 +1,5 @@
 import { Button, Form, Input } from 'antd';
-import useRegister from "../hooks/useRegister.ts";
+import useRegister from "../hooks/useRegister";
 
 const RegisterForm = () => {
     const [form] = Form.useForm();
@@ -45,6 +45,22 @@ const RegisterForm = () => {
                 <Input
                        type="password"
                        autoComplete="off"
+                />
+            </Form.Item>
+            <Form.Item
+                name="secunumber"
+                label="Social Security Number"
+                rules={[
+                    {
+                        required: true,
+                        message: 'Please input your social security number!',
+                    },
+                ]}
+                hasFeedback
+            >
+                <Input
+                    type="number"
+                    autoComplete="off"
                 />
             </Form.Item>
 
