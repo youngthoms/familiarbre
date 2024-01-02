@@ -60,30 +60,25 @@ public class FamilyMemberService {
     public void getChildList(FamilyMember currentUser,FamilyMember familyMember, List<FamilyMember> familyTree){
         for (FamilyMember familyMember1 : getAll()){
             if(familyMember==familyMember1.getDad()){
-                if(familyMember1.getDad().getStatus()==Status.PRIVATE && familyMember1.getDad()==currentUser){
-                    familyTree.add(familyMember1);
-                    getChildList(currentUser,familyMember1.getDad(),familyTree);
-                } else if (familyMember1.getDad().getStatus()==Status.PUBLIC) {
-                    familyTree.add(familyMember1);
-                    getChildList(currentUser,familyMember1.getDad(),familyTree);
-                } else if (familyMember1.getDad().getStatus()==Status.PROTECTED && isInFamilyTree(currentUser,familyMember1.getDad()) ) {
-                    familyTree.add(familyMember1);
-                    getChildList(currentUser,familyMember1.getDad(),familyTree);
-                }
+                addChild(currentUser, familyTree, familyMember1);
             }
             if(familyMember == familyMember1.getMom()){
-                if(familyMember1.getMom().getStatus() == Status.PRIVATE && familyMember1.getMom() == currentUser){
-                    familyTree.add(familyMember1);
-                    getChildList(currentUser, familyMember1.getMom(), familyTree);
-                } else if (familyMember1.getMom().getStatus() == Status.PUBLIC) {
-                    familyTree.add(familyMember1);
-                    getChildList(currentUser, familyMember1.getMom(), familyTree);
-                } else if (familyMember1.getMom().getStatus() == Status.PROTECTED && isInFamilyTree(currentUser, familyMember1.getMom())) {
-                    familyTree.add(familyMember1);
-                    getChildList(currentUser, familyMember1.getMom(), familyTree);
-                }
+                addChild(currentUser, familyTree, familyMember1);
             }
 
+        }
+    }
+
+    private void addChild(FamilyMember currentUser, List<FamilyMember> familyTree, FamilyMember familyMember1) {
+        if(familyMember1.getStatus() == Status.PRIVATE && familyMember1 == currentUser){
+            familyTree.add(familyMember1);
+            getChildList(currentUser, familyMember1, familyTree);
+        } else if (familyMember1.getStatus() == Status.PUBLIC) {
+            familyTree.add(familyMember1);
+            getChildList(currentUser, familyMember1, familyTree);
+        } else if (familyMember1.getStatus() == Status.PROTECTED && isInFamilyTree(currentUser, familyMember1)) {
+            familyTree.add(familyMember1);
+            getChildList(currentUser, familyMember1, familyTree);
         }
     }
 
