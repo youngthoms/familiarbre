@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import {useNavigate} from "react-router-dom";
 
 interface SignInFormData {
     email: string;
@@ -8,6 +9,7 @@ interface SignInFormData {
 const useLogin = () => {
     const [isLoading, setIsLoading] = useState<boolean>(false);
     const [error, setError] = useState<string | null>(null);
+    const navigate = useNavigate(); // Ajout de useNavigate
 
     const signIn = async (formData: SignInFormData) => {
         setIsLoading(true);
@@ -23,15 +25,11 @@ const useLogin = () => {
             if (!response.ok) {
                 throw new Error('Failed to login');
             }
-            const { token } = await response.json();  // Extract the token from the response
-            console.log("Token received: ", token);
-
-            // Decode the token
-            // const decoded: DecodedToken = jwtDecode(token);
-            // console.log("User ID from token: ", decoded.userId);
-
-            // Store the token in localStorage
-            localStorage.setItem('jwtToken', token);
+            const data = await response.json();
+            console.log(data);
+            localStorage.setItem('jwtToken', data.token);
+            localStorage.setItem('userId', data.userId);
+            navigate('/personaltree');
             console.log("tudo bem");
         } catch (err) {
             // @ts-ignore

@@ -1,4 +1,4 @@
-interface TreeNode {
+export interface TreeNode {
     id: string | number;
     pids?: Array<string | number>;
     mid?: string | number;

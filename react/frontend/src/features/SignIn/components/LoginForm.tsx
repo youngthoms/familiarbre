@@ -1,5 +1,5 @@
 import { Button, Form, Input } from 'antd';
-import useLogin from "../hooks/useLogin.ts"; // Assurez-vous que ce hook est bien défini pour la gestion de la connexion
+import useLogin from "../hooks/useLogin";
 
 const LoginForm = () => {
     const [form] = Form.useForm();

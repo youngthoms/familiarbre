@@ -1,5 +1,5 @@
 import * as React from 'react';
-import {useState} from 'react';
+import {useEffect, useState} from 'react';
 import {
     AppstoreOutlined,
     BarChartOutlined,
@@ -19,6 +19,7 @@ import {
     StyledSider
 } from "./PersonalTree.style";
 import MyTree from "../../../mytree.jsx";
+import {TreeNode} from "../../../types/TreeNode";
 
 const items: MenuProps['items'] = [
     UserOutlined,
@@ -36,16 +37,42 @@ const items: MenuProps['items'] = [
 }));
 
 export const PersonalTree: React.FC = (): JSX.Element => {
-    // const [nodes, setNodes] = useState<TreeNode[]>([]);
-    const [showTree, setShowTree] = useState(false);
-    // const treeDivRef = useRef(null);
-    const nodes = [
-        { id: 1, name: "Amber McKenzie", gender: "female" }
-    ];
-    const createTree = () => {
-        //setNodes([{ id: "1", name: "Racine" }]);  // Ajoutez un nœud racine à l'arbre
-        setShowTree(true);
+    const [treeData, setTreeData] = useState<TreeNode[]>([]);
+    const [loadingTree, setLoadingTree] = useState(true);
+
+    const loadUserTree = async () => {
+        const token = localStorage.getItem('jwtToken');
+        const userId = localStorage.getItem('userId');
+        console.log(token);
+        console.log(userId);
+
+        if (token && userId) {
+            try {
+                // @ts-ignore
+                const response = await fetch(`${import.meta.env.VITE_BASE_URL}/api/family-members/tree/${token}/${userId}`, {
+                    method: 'GET',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${token}`,
+                    },
+                });
+                if (!response.ok) {
+                    throw new Error('Failed to load tree');
+                }
+                const tree = await response.json();
+                setTreeData(tree);
+            } catch (error) {
+                console.error('Failed to fetch tree:', error);
+                // Traitez l'erreur comme vous le souhaitez
+            } finally {
+                setLoadingTree(false);
+            }
+        }
     };
+
+    useEffect(() => {
+        loadUserTree();
+    }, []);
 
     return (
         <Layout hasSider>
@@ -57,10 +84,11 @@ export const PersonalTree: React.FC = (): JSX.Element => {
                 <StyledHeader />
                 <StyledContent>
                     <ContentContainer>
-                        <Button type="primary" onClick={createTree}>Créer un arbre</Button>
-                        {showTree && <div style={{ height: "100%" }}>
-                            <MyTree nodes={nodes} />
-                        </div>}
+                        {!loadingTree && treeData.length > 0 && (
+                            <div style={{ height: "100%" }}>
+                                <MyTree nodes={treeData} />
+                            </div>
+                        )}
                     </ContentContainer>
                 </StyledContent>
             </StyledLayout>
