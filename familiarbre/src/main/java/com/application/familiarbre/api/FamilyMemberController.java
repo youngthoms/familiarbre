@@ -6,11 +6,13 @@ import com.application.familiarbre.models.entites.Token;
 import com.application.familiarbre.models.entites.User;
 import com.application.familiarbre.models.services.FamilyMemberService;
 import com.application.familiarbre.models.services.UserService;
+import jakarta.xml.ws.http.HTTPException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 
 
 @RestController
@@ -30,11 +32,12 @@ public class FamilyMemberController {
     }
 
     @GetMapping("/tree/{token}/{user_id_target}")
-    public List<Node> getTree(@PathVariable String token, @PathVariable Long user_id_target){
-        System.out.println(token);
+    public List<Node> getTree(@PathVariable String token, @PathVariable Long user_id_target) {
         User user = userService.loadUserByToken(token);
-        Long user_id_connected = familyMemberService.getByUser(user).get().getId();
-        return familyMemberService.hasAccess(user_id_connected,user_id_target);
+        FamilyMember familyMemberUserConnected = familyMemberService.getByUserId(user.getId());
+        FamilyMember familyMemberUserTarget = familyMemberService.getByUserId(user_id_target);
+
+        return familyMemberService.hasAccess(familyMemberUserConnected.getId(), familyMemberUserTarget.getId());
     }
 
     @GetMapping("/id/{id}")

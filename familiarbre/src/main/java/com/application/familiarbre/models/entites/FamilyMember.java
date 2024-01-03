@@ -2,12 +2,10 @@ package com.application.familiarbre.models.entites;
 
 import jakarta.persistence.*;
 import lombok.*;
-import netscape.javascript.JSObject;
 
 import java.io.Serializable;
 import java.sql.Date;
 import java.util.List;
-import com.fasterxml.jackson.annotation.JsonProperty;
 
 @Data
 @Builder

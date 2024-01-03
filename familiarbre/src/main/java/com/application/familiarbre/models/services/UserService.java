@@ -44,4 +44,8 @@ public class UserService implements UserDetailsService {
             throw new UsernameNotFoundException("User not found for the token");
         }
     }
+
+    public boolean emailExists(String email) {
+        return (userRepository.findByEmail(email).isPresent());
+    }
 }

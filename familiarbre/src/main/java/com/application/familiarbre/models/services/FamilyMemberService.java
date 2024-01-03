@@ -32,7 +32,7 @@ public class FamilyMemberService {
     public Optional<FamilyMember> getByUser(User user) {
         return repository.findByUser(user);
     }
-    public List<Node> hasAccess(long idCurrentUser, long idUserTarget){
+    public List<Node> hasAccess(Long idCurrentUser, Long idUserTarget){
         if (getById(idUserTarget).getStatus()==Status.PUBLIC){
             return getFamilyTree(idCurrentUser, idUserTarget);
         }
@@ -135,4 +135,10 @@ public class FamilyMemberService {
             return momResult || dadResult;
         }
     }
+
+    public FamilyMember getByUserId(Long userId) {
+        Optional<FamilyMember> fm = repository.findByUserId(userId);
+        return fm.orElse(null);
+    }
+
 }
