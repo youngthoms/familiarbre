@@ -27,6 +27,7 @@ public class FamiliarbreApplication {
             var user = RegisterRequest.builder()
                     .email("user@mail.com")
                     .password("password")
+                    .birthDay("01/01/2000")
                     .build();
             System.out.println("User token: " + service.register(user).getToken());
         };

@@ -139,4 +139,10 @@ public class FamilyMemberService {
         return fm.orElse(null);
     }
 
+    public void setStatus(FamilyMember familyMember, Status privacy) {
+        familyMember.setStatus(privacy);
+
+        repository.save(familyMember);
+    }
+
 }
