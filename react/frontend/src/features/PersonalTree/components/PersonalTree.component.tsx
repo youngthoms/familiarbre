@@ -1,4 +1,5 @@
-import React, {useState} from 'react';
+import * as React from 'react';
+import {useState} from 'react';
 import {
     AppstoreOutlined,
     BarChartOutlined,
@@ -16,7 +17,7 @@ import {
     StyledContent,
     StyledHeader, StyledLayout,
     StyledSider
-} from "./PersonalTree.style.tsx";
+} from "./PersonalTree.style";
 import MyTree from "../../../mytree.jsx";
 
 const items: MenuProps['items'] = [
