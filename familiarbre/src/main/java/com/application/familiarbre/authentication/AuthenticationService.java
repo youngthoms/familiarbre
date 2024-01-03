@@ -46,9 +46,10 @@ public class AuthenticationService {
         familyMemberRepository.save(familyMember);
 
         var jwtToken = jwtService.generateToken(user);
+        var refreshToken = jwtService.generateRefreshToken(user);
         saveUserToken(user, jwtToken);
 
-        return AuthenticationResponse.builder().token(jwtToken).userId(user.getId()).build();
+        return AuthenticationResponse.builder().token(jwtToken).refreshToken(refreshToken).userId(user.getId()).build();
     }
 
     public AuthenticationResponse authenticate(AuthenticationRequest request) {
@@ -62,11 +63,11 @@ public class AuthenticationService {
         // TODO : refine the exception
         var user = userRepository.findByEmail(request.getEmail()).orElseThrow();
         var jwtToken = jwtService.generateToken(user);
-        // var refreshToken = jwtService.generateRefreshToken(user);
-
+        var refreshToken = jwtService.generateRefreshToken(user);
+        revokeAllUserTokens(user);
         saveUserToken(user, jwtToken);
 
-        return AuthenticationResponse.builder().token(jwtToken).userId(user.getId()).build();
+        return AuthenticationResponse.builder().token(jwtToken).refreshToken(refreshToken).userId(user.getId()).build();
     }
 
     private void saveUserToken(User user, String jwtToken) {

@@ -42,7 +42,7 @@ public class FamilyMemberService {
             return getFamilyTree(idCurrentUser, idUserTarget);
         }
         throw new org.springframework.security.access.AccessDeniedException("403 returned");
-    };
+    }
     public List<Node> getFamilyTree(long idCurrentUser, long idUserTarget){
         return getFamilyTree(getById(idCurrentUser),getById(idUserTarget));
     }
@@ -64,8 +64,6 @@ public class FamilyMemberService {
             tree.add(new Node(i.getId(), midId, pidsArray, fidId, i.getFullName(), i.getGender()));
         }
         return tree;
-
-
     }
 
     public void getParentsList (FamilyMember currentUser, FamilyMember familyMember, List<FamilyMember> familyTree){
