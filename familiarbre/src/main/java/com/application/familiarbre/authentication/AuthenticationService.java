@@ -15,7 +15,10 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.io.IOException;
+import java.sql.Date;
 
 @Service
 @RequiredArgsConstructor
@@ -28,6 +31,11 @@ public class AuthenticationService {
     private final JwtService jwtService;
     private final AuthenticationManager authenticationManager;
 
+    public java.sql.Date parseDate(String dateString) {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+        LocalDate localDate = LocalDate.parse(dateString, formatter);
+        return java.sql.Date.valueOf(localDate);
+    }
     public AuthenticationResponse register(RegisterRequest request) {
         var user = User.builder()
                 .email(request.getEmail())
@@ -37,9 +45,14 @@ public class AuthenticationService {
 
         userRepository.save(user);
 
+        java.sql.Date birthDay = parseDate(request.getBirthDay());
+
         var familyMember = FamilyMember.builder()
                 .firstName(request.getFirstName())
                 .lastName(request.getLastName())
+                .birthDay(birthDay)
+                .gender(request.getGender())
+                .socialSecurityNumber(request.getSocialSecurityNumber())
                 .user(user)
                 .build();
 

@@ -1,9 +1,13 @@
 import { useState } from 'react';
 
 interface SignUpFormData {
-    username: string;
     email: string;
     password: string;
+    firstName: string;
+    lastName: string;
+    birthDay: Date;
+    gender: string;
+    socialSecurityNumber: string;
 }
 
 const useRegister = () => {
