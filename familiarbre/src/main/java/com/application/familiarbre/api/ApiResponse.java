@@ -7,6 +7,6 @@ import lombok.*;
 @Getter
 @AllArgsConstructor
 @NoArgsConstructor
-public class PrivacyResponse {
+public class ApiResponse {
     private String response;
 }

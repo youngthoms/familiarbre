@@ -1,10 +1,7 @@
 package com.application.familiarbre.models.services;
 
 import com.application.familiarbre.models.dao.FamilyMemberRepository;
-import com.application.familiarbre.models.entites.FamilyMember;
-import com.application.familiarbre.models.entites.Node;
-import com.application.familiarbre.models.entites.Status;
-import com.application.familiarbre.models.entites.User;
+import com.application.familiarbre.models.entites.*;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -143,6 +140,19 @@ public class FamilyMemberService {
         familyMember.setStatus(privacy);
 
         repository.save(familyMember);
+    }
+
+    public void addChild(FamilyMember parent, FamilyMember child) {
+        Gender parentGender = parent.getGender();
+        if (parentGender.equals(Gender.female)) {
+            child.setMid(parent);
+        }
+
+        if (parentGender.equals(Gender.male)) {
+            child.setFid(parent);
+        }
+
+        repository.save(child);
     }
 
 }
