@@ -252,5 +252,4 @@ class FamilyTreeHelperTest {
         // Assert
         assertTrue(familyTree.contains(familyMember));
     }
-
 }

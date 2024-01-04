@@ -53,7 +53,7 @@ public class FamilyMemberController {
         return ResponseEntity.ok(ApiResponse.builder().response("OK").build());
     }
 
-    @PostMapping("/add/child")
+    @PostMapping("/child/add")
     public ResponseEntity<ApiResponse> addChild(@RequestBody AddChildRequest addChildRequest) {
         FamilyMember parent = familyMemberService.getById(addChildRequest.getParentId());
         FamilyMember child = familyMemberService.getById(addChildRequest.getChildId());
@@ -72,13 +72,11 @@ public class FamilyMemberController {
                             .response("Child added to parent successfully.")
                             .build());
         } catch (IllegalStateException e) {
-            // Custom exception for business logic errors
             return ResponseEntity.status(HttpStatus.BAD_REQUEST)
                     .body(ApiResponse.builder()
                             .response(e.getMessage())
                             .build());
         } catch (Exception e) {
-            // General exception handler for unexpected errors
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                     .body(ApiResponse.builder()
                             .response("An error occurred while adding the child.")
@@ -86,12 +84,20 @@ public class FamilyMemberController {
         }
     }
 
-    @GetMapping("/remove/child/{child_id}")
-    public ResponseEntity<ApiResponse> removeChild(@PathVariable Long child_id) {
-        FamilyMember child = familyMemberService.getById(child_id);
+    @DeleteMapping("/child/remove/{childId}")
+    public ResponseEntity<ApiResponse> removeChild(@PathVariable Long childId) {
+        try {
+            FamilyMember child = familyMemberService.getById(childId);
+            if (child == null) {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                        .body(ApiResponse.builder().response("Child not found").build());
+            }
 
-        familyMemberService.removeChild(child);
-
-        return ResponseEntity.ok(ApiResponse.builder().response("OK").build());
+            familyMemberService.removeChild(child);
+            return ResponseEntity.ok(ApiResponse.builder().response("Child removed successfully").build());
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(ApiResponse.builder().response("Error removing child: " + e.getMessage()).build());
+        }
     }
 }
