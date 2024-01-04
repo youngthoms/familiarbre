@@ -9,6 +9,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
 @Service
@@ -29,11 +30,11 @@ public class FamilyMemberService {
     }
 
     public List<Node> hasAccess(Long idCurrentUser, Long idUserTarget) {
-        if (getById(idUserTarget).getStatus() == Status.PUBLIC) {
+        if (getById(idUserTarget).getStatus() == Status.PUBLIC || getById(idUserTarget).getStatus() == null) {
             return getFamilyTree(idCurrentUser, idUserTarget);
         } else if (getById(idUserTarget).getStatus() == Status.PROTECTED && (isInFamilyTree(getById(idCurrentUser), getById(idCurrentUser)) | isInFamilyTree(getById(idUserTarget), getById(idCurrentUser)))) {
             return getFamilyTree(idCurrentUser, idUserTarget);
-        } else if ((getById(idUserTarget).getStatus() == Status.PRIVATE | getById(idUserTarget).getStatus() == null) && idUserTarget == idCurrentUser) {
+        } else if ((getById(idUserTarget).getStatus() == Status.PRIVATE) && (Objects.equals(idUserTarget, idCurrentUser))) {
             return getFamilyTree(idCurrentUser, idUserTarget);
         }
         throw new org.springframework.security.access.AccessDeniedException("403 returned");
