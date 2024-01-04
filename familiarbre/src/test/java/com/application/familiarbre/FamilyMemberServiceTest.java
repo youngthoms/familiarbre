@@ -6,6 +6,7 @@ import static org.junit.jupiter.api.Assertions.*;
 import com.application.familiarbre.models.dao.FamilyMemberRepository;
 import com.application.familiarbre.models.entites.FamilyMember;
 import com.application.familiarbre.models.entites.Gender;
+import com.application.familiarbre.models.entites.Status;
 import com.application.familiarbre.models.services.FamilyMemberService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -15,18 +16,15 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 
+
 @ExtendWith(MockitoExtension.class)
 public class FamilyMemberServiceTest {
 
     @Mock
     private FamilyMemberRepository familyMemberRepository;
-
     @InjectMocks
     private FamilyMemberService familyMemberService;
-
-    private FamilyMember mother;
-    private FamilyMember father;
-    private FamilyMember child;
+    private FamilyMember mother, father, child;
 
     @BeforeEach
     void setup() {
@@ -99,4 +97,3 @@ public class FamilyMemberServiceTest {
         });
     }
 }
-
