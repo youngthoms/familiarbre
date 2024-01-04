@@ -4,6 +4,7 @@ import com.application.familiarbre.models.dao.FamilyMemberRepository;
 import com.application.familiarbre.models.entites.*;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -142,15 +143,47 @@ public class FamilyMemberService {
         repository.save(familyMember);
     }
 
+    @Transactional
     public void addChild(FamilyMember parent, FamilyMember child) {
+        if (parent == null || child == null) {
+            throw new IllegalArgumentException("Parent and child must not be null");
+        }
+
         Gender parentGender = parent.getGender();
+
+        if (parentGender == null) {
+            throw new IllegalStateException("Parent gender must not be null");
+        }
+
+        // Setting mother
         if (parentGender.equals(Gender.female)) {
+            if (child.getMid() != null) {
+                // Handle the case where a mother is already set
+                throw new IllegalStateException("Child already has a mother set");
+            }
             child.setMid(parent);
         }
 
+        // Setting father
         if (parentGender.equals(Gender.male)) {
+            if (child.getFid() != null) {
+                // Handle the case where a father is already set
+                throw new IllegalStateException("Child already has a father set");
+            }
             child.setFid(parent);
         }
+
+        repository.save(child);
+    }
+
+    @Transactional
+    public void removeChild(FamilyMember child) {
+        if (child == null) {
+            throw new IllegalArgumentException("Child cannot be null");
+        }
+
+        child.setMid(null);
+        child.setFid(null);
 
         repository.save(child);
     }

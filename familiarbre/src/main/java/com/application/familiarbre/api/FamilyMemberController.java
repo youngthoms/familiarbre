@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.http.HttpStatus;
 
 import java.util.List;
 
@@ -19,6 +20,7 @@ public class FamilyMemberController {
     FamilyMemberService familyMemberService;
     @Autowired
     UserService userService;
+
     @GetMapping("/all")
     public List<FamilyMember> all(Model model) {
         List<FamilyMember> familyMembers = familyMemberService.getAll();
@@ -51,12 +53,44 @@ public class FamilyMemberController {
         return ResponseEntity.ok(ApiResponse.builder().response("OK").build());
     }
 
-    @GetMapping("/add/child/{parent_id}/{child_id}")
-    public ResponseEntity<ApiResponse> addNode(@PathVariable Long parent_id, @PathVariable Long child_id) {
-        FamilyMember parent = familyMemberService.getById(parent_id);
+    @PostMapping("/add/child")
+    public ResponseEntity<ApiResponse> addChild(@RequestBody AddChildRequest addChildRequest) {
+        FamilyMember parent = familyMemberService.getById(addChildRequest.getParentId());
+        FamilyMember child = familyMemberService.getById(addChildRequest.getChildId());
+
+        if (parent == null || child == null) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body(ApiResponse.builder()
+                            .response("Parent or child not found.")
+                            .build());
+        }
+
+        try {
+            familyMemberService.addChild(parent, child);
+            return ResponseEntity.status(HttpStatus.CREATED)
+                    .body(ApiResponse.builder()
+                            .response("Child added to parent successfully.")
+                            .build());
+        } catch (IllegalStateException e) {
+            // Custom exception for business logic errors
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                    .body(ApiResponse.builder()
+                            .response(e.getMessage())
+                            .build());
+        } catch (Exception e) {
+            // General exception handler for unexpected errors
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(ApiResponse.builder()
+                            .response("An error occurred while adding the child.")
+                            .build());
+        }
+    }
+
+    @GetMapping("/remove/child/{child_id}")
+    public ResponseEntity<ApiResponse> removeChild(@PathVariable Long child_id) {
         FamilyMember child = familyMemberService.getById(child_id);
 
-        familyMemberService.addChild(parent, child);
+        familyMemberService.removeChild(child);
 
         return ResponseEntity.ok(ApiResponse.builder().response("OK").build());
     }
