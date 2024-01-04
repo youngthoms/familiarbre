@@ -15,9 +15,8 @@ public class FamilyTreeHelper {
         getChildList(currentUser, familyMember, familyTree, allFamilyMembers);
         List<Node> tree = new ArrayList<>();
         for (FamilyMember i : familyTree) {
-            Long midId = (i.getMid() != null) ? i.getMid().getId() : null;
-            Long fidId = (i.getFid() != null) ? i.getFid().getId() : null;
-
+            Long midId = (i.getMid() != null && i.getMid().getStatus()!=Status.PRIVATE) ? i.getMid().getId() : null;
+            Long fidId = (i.getFid() != null && i.getFid().getStatus()!=Status.PRIVATE) ? i.getFid().getId() : null;
             List<Long> pids = new ArrayList<>();
             if (i.getPids() != null) {
                 for (FamilyMember j : i.getPids()) {
@@ -25,7 +24,7 @@ public class FamilyTreeHelper {
                 }
             }
             Long[] pidsArray = pids.toArray(new Long[0]);
-
+            System.out.println(fidId);
             tree.add(new Node(i.getId(), midId, pidsArray, fidId, i.getFullName(), i.getGender()));
         }
         return tree;
@@ -35,18 +34,18 @@ public class FamilyTreeHelper {
         if (familyMember != null) {
             familyTree.add(familyMember);
             if (familyMember.getMid() != null) {
-                if ((familyMember.getMid().getStatus() == Status.PRIVATE | familyMember.getMid().getStatus() == null) && familyMember.getMid() == currentUser) {
+                if ((familyMember.getMid().getStatus() == Status.PRIVATE ) && familyMember.getMid() == currentUser) {
                     getParentsList(currentUser, familyMember.getMid(), familyTree);
-                } else if (familyMember.getMid().getStatus() == Status.PUBLIC) {
+                } else if (familyMember.getMid().getStatus() == Status.PUBLIC | familyMember.getMid().getStatus() == null) {
                     getParentsList(currentUser, familyMember.getMid(), familyTree);
                 } else if (familyMember.getMid().getStatus() == Status.PROTECTED && (isInFamilyTree(currentUser, familyMember.getMid()) | isInFamilyTree(familyMember.getMid(), currentUser))) {
                     getParentsList(currentUser, familyMember.getMid(), familyTree);
                 }
             }
             if (familyMember.getFid() != null) {
-                if ((familyMember.getFid().getStatus() == Status.PRIVATE | familyMember.getFid().getStatus() == null) && familyMember.getFid() == currentUser) {
+                if ((familyMember.getFid().getStatus() == Status.PRIVATE ) && familyMember.getFid() == currentUser) {
                     getParentsList(currentUser, familyMember.getFid(), familyTree);
-                } else if (familyMember.getFid().getStatus() == Status.PUBLIC) {
+                } else if (familyMember.getFid().getStatus() == Status.PUBLIC | familyMember.getFid().getStatus() == null) {
                     getParentsList(currentUser, familyMember.getFid(), familyTree);
                 } else if (familyMember.getFid().getStatus() == Status.PROTECTED && (isInFamilyTree(currentUser, familyMember.getFid()) | isInFamilyTree(familyMember.getFid(), currentUser))) {
                     getParentsList(currentUser, familyMember.getFid(), familyTree);
