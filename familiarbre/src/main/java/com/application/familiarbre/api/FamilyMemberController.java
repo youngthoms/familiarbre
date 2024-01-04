@@ -53,6 +53,38 @@ public class FamilyMemberController {
         return ResponseEntity.ok(ApiResponse.builder().response("OK").build());
     }
 
+    @PostMapping("/spouse/add")
+    public ResponseEntity<ApiResponse> addSpouse(@RequestBody AddSpouseRequest addSpouseRequest){
+        FamilyMember member1 = familyMemberService.getById(addSpouseRequest.getMember1());
+        FamilyMember member2 = familyMemberService.getById(addSpouseRequest.getMember2());
+
+        if (member1 ==null || member2 == null){
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body(ApiResponse.builder()
+                            .response("Spouse not found")
+                            .build());
+        }
+        else {
+            try {
+                familyMemberService.addSpouse(member1, member2);
+                return ResponseEntity.status(HttpStatus.CREATED)
+                        .body(ApiResponse.builder()
+                                .response("Spouses successfully.")
+                                .build());
+            } catch (IllegalStateException e) {
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                        .body(ApiResponse.builder()
+                                .response(e.getMessage())
+                                .build());
+            } catch (Exception e) {
+                return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                        .body(ApiResponse.builder()
+                                .response("An error occurred while adding the spouses.")
+                                .build());
+            }
+        }
+    }
+
     @PostMapping("/child/add")
     public ResponseEntity<ApiResponse> addChild(@RequestBody AddChildRequest addChildRequest) {
         FamilyMember parent = familyMemberService.getById(addChildRequest.getParentId());
