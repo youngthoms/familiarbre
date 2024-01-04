@@ -5,6 +5,7 @@ import com.application.familiarbre.authentication.AuthenticationService;
 import com.application.familiarbre.authentication.RegisterRequest;
 import com.application.familiarbre.models.entites.FamilyMember;
 import com.application.familiarbre.models.entites.Gender;
+import com.application.familiarbre.models.entites.Status;
 import com.application.familiarbre.models.services.FamilyMemberService;
 import com.application.familiarbre.models.services.UserService;
 import org.springframework.boot.CommandLineRunner;
@@ -52,6 +53,7 @@ public class FamiliarbreApplication {
                 AuthenticationResponse responseUser2 = service.register(user2);
                 System.out.println("User2 token: " + responseUser2.getToken());
                 FamilyMember familyMemberUser2 = familyMemberService.getByUserId(responseUser2.getUserId());
+                familyMemberUser2.setStatus(Status.PUBLIC);
                 familyMemberService.addChild(familyMemberUser, familyMemberUser2);
             }
         }
