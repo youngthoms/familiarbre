@@ -20,6 +20,7 @@ import {
 } from "./PersonalTree.style";
 import MyTree from "../../../mytree.jsx";
 import {TreeNode} from "../../../types/TreeNode";
+import TreeVisibilityOptions from "./TreeVisibility.component";
 
 const items: MenuProps['items'] = [
     UserOutlined,
@@ -36,7 +37,7 @@ const items: MenuProps['items'] = [
     label: `nav ${index + 1}`,
 }));
 
-export const PersonalTree: React.FC = (): JSX.Element => {
+export const PersonalTree: React.FC = (): React.ReactElement => {
     const [treeData, setTreeData] = useState<TreeNode[]>([]);
     const [loadingTree, setLoadingTree] = useState(true);
 
@@ -84,6 +85,7 @@ export const PersonalTree: React.FC = (): JSX.Element => {
                 <StyledHeader />
                 <StyledContent>
                     <ContentContainer>
+                        <TreeVisibilityOptions/>
                         {!loadingTree && treeData.length > 0 && (
                             <div style={{ height: "100%" }}>
                                 <MyTree nodes={treeData} />
