@@ -75,6 +75,17 @@ public class FamilyMemberService {
 
         repository.save(familyMember);
     }
+    @Transactional
+    public void addSpouse(FamilyMember member1, FamilyMember member2){
+        List<FamilyMember>addList=member1.getPids();
+        addList.add(member2);
+        member1.setPids(addList);
+        repository.save(member1);
+        addList=member2.getPids();
+        addList.add(member1);
+        member2.setPids(addList);
+        repository.save(member2);
+    }
 
     @Transactional
     public void addChild(FamilyMember parent, FamilyMember child) {
