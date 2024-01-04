@@ -51,13 +51,12 @@ public class FamilyMemberController {
         return ResponseEntity.ok(ApiResponse.builder().response("OK").build());
     }
 
-    @GetMapping("/add/child/{token}/{child_id}")
-    public ResponseEntity<ApiResponse> addNode(@PathVariable String token, @PathVariable Long child_id) {
-        User user = userService.loadUserByToken(token);
-        FamilyMember familyMember = familyMemberService.getByUserId(user.getId());
+    @GetMapping("/add/child/{parent_id}/{child_id}")
+    public ResponseEntity<ApiResponse> addNode(@PathVariable Long parent_id, @PathVariable Long child_id) {
+        FamilyMember parent = familyMemberService.getById(parent_id);
         FamilyMember child = familyMemberService.getById(child_id);
 
-        familyMemberService.addChild(familyMember, child);
+        familyMemberService.addChild(parent, child);
 
         return ResponseEntity.ok(ApiResponse.builder().response("OK").build());
     }
