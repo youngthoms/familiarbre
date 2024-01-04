@@ -56,3 +56,8 @@ A faire :
 Partage de ressources avec les membres de la famille uniquement.
 ### Statistiques des Consultations
 Suivi des consultations de l'arbre par d'autres utilisateurs.
+
+## TODO FOR NICO
+  - avoir le nom d'utilisateur sur le side menu --> supprimer les tous les elements inutiles du menu + afficher en haut du menu le user connecté (PersonalTreeComponent)
+  - fix le css sur le menu (bord blanc autour qui faudrait enlever)
+  - page d'accueil à pimp : stylisé les boutons "s'inscrire" et "se connecter" le mettre au milieu de la page + centrer les deux fields pour la connexion (LoginForm)
