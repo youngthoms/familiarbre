@@ -103,4 +103,154 @@ class FamilyTreeHelperTest {
         // Additional assertions to verify the correctness of Node properties
         // For example, checking the parent-child relationship in the nodes
     }
+
+    @Test
+    void getChildList_ShouldCorrectlyPopulateFamilyTreeWithChildren() {
+        // Arrange
+        FamilyMember currentUser = parent1;
+
+        parent1.setGender(Gender.male);
+
+        FamilyMember child1 = new FamilyMember();
+        child1.setId(3L);
+        child1.setStatus(Status.PUBLIC);
+        child1.setFid(parent1); // child1's father is 'parent'
+
+        FamilyMember child2 = new FamilyMember();
+        child2.setId(4L);
+        child2.setStatus(Status.PUBLIC);
+        child2.setFid(parent1); // child2's father is 'parent'
+
+        List<FamilyMember> allFamilyMembers = new ArrayList<>();
+        allFamilyMembers.add(child1);
+        allFamilyMembers.add(child2);
+        allFamilyMembers.add(parent1);
+
+        List<FamilyMember> familyTree = new ArrayList<>();
+
+        // Act
+        FamilyTreeHelper.getChildList(currentUser, parent1, familyTree, allFamilyMembers);
+
+        // Assert
+        assertTrue(familyTree.contains(child1));
+        assertTrue(familyTree.contains(child2));
+        assertEquals(2, familyTree.size()); // Verifying that both children are added
+    }
+
+    @Test
+    void isInFamilyTree_WhenSameUser_ShouldReturnTrue() {
+        // Arrange
+        FamilyMember user = new FamilyMember();
+        user.setId(1L);
+
+        // Act & Assert
+        assertTrue(FamilyTreeHelper.isInFamilyTree(user, user));
+    }
+
+    @Test
+    void isInFamilyTree_WhenDirectParent_ShouldReturnTrue() {
+        // Arrange
+        FamilyMember child = new FamilyMember();
+        child.setId(1L);
+
+        FamilyMember parent = new FamilyMember();
+        parent.setId(2L);
+        child.setFid(parent); // Setting parent as father of the child
+
+        // Act & Assert
+        assertTrue(FamilyTreeHelper.isInFamilyTree(parent, child));
+    }
+
+    @Test
+    void isInFamilyTree_WhenAncestor_ShouldReturnTrue() {
+        // Arrange
+        FamilyMember child = new FamilyMember();
+        child.setId(1L);
+
+        FamilyMember parent = new FamilyMember();
+        parent.setId(2L);
+        child.setFid(parent);
+
+        FamilyMember grandparent = new FamilyMember();
+        grandparent.setId(3L);
+        parent.setFid(grandparent); // Setting grandparent as father of the parent
+
+        // Act & Assert
+        assertTrue(FamilyTreeHelper.isInFamilyTree(grandparent, child));
+    }
+
+    @Test
+    void isInFamilyTree_WhenNotRelated_ShouldReturnFalse() {
+        // Arrange
+        FamilyMember user1 = new FamilyMember();
+        user1.setId(1L);
+
+        FamilyMember user2 = new FamilyMember();
+        user2.setId(2L);
+
+        // Act & Assert
+        assertFalse(FamilyTreeHelper.isInFamilyTree(user1, user2));
+    }
+
+    @Test
+    void addChild_WhenFamilyMemberIsPublic_ShouldAddToFamilyTree() {
+        // Arrange
+        FamilyMember currentUser = new FamilyMember();
+        FamilyMember familyMember = new FamilyMember();
+        familyMember.setStatus(Status.PUBLIC);
+        familyMember.setFid(currentUser);
+
+        List<FamilyMember> familyTree = new ArrayList<>();
+        List<FamilyMember> allFamilyMembers = new ArrayList<>();
+        allFamilyMembers.add(currentUser);
+        allFamilyMembers.add(familyMember);
+
+        // Act
+        FamilyTreeHelper.addChild(currentUser, familyTree, familyMember, allFamilyMembers);
+
+        // Assert
+        assertTrue(familyTree.contains(familyMember));
+    }
+
+    @Test
+    void addChild_WhenFamilyMemberIsPrivateAndCurrentUser_ShouldAddToFamilyTree() {
+        // Arrange
+        FamilyMember currentUser = new FamilyMember();
+        FamilyMember familyMember = currentUser;
+        familyMember.setStatus(Status.PRIVATE);
+
+        List<FamilyMember> familyTree = new ArrayList<>();
+        List<FamilyMember> allFamilyMembers = new ArrayList<>();
+        allFamilyMembers.add(currentUser);
+
+        // Act
+        FamilyTreeHelper.addChild(currentUser, familyTree, familyMember, allFamilyMembers);
+
+        // Assert
+        assertTrue(familyTree.contains(familyMember));
+    }
+
+    @Test
+    void addChild_WhenFamilyMemberIsProtectedAndInFamilyTree_ShouldAddToFamilyTree() {
+        // Arrange
+        FamilyMember currentUser = new FamilyMember();
+        FamilyMember familyMember = new FamilyMember();
+        familyMember.setStatus(Status.PROTECTED);
+        familyMember.setFid(currentUser);
+
+        List<FamilyMember> familyTree = new ArrayList<>();
+        List<FamilyMember> allFamilyMembers = new ArrayList<>();
+        allFamilyMembers.add(currentUser);
+        allFamilyMembers.add(familyMember);
+
+        // Mock isInFamilyTree to return true for these members
+        // Note: This requires changing isInFamilyTree to non-static or using a PowerMockito to mock static methods.
+
+        // Act
+        FamilyTreeHelper.addChild(currentUser, familyTree, familyMember, allFamilyMembers);
+
+        // Assert
+        assertTrue(familyTree.contains(familyMember));
+    }
+
 }

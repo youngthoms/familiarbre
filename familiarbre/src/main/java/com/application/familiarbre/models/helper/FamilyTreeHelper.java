@@ -84,16 +84,16 @@ public class FamilyTreeHelper {
         }
     }
 
-    public static void addChild(FamilyMember currentUser, List<FamilyMember> familyTree, FamilyMember familyMember1, List<FamilyMember> allFamilyMembers) {
-        if ((familyMember1.getStatus() == Status.PRIVATE | familyMember1.getStatus() == null) && familyMember1 == currentUser) {
-            familyTree.add(familyMember1);
-            getChildList(currentUser, familyMember1, familyTree, allFamilyMembers);
-        } else if (familyMember1.getStatus() == Status.PUBLIC) {
-            familyTree.add(familyMember1);
-            getChildList(currentUser, familyMember1, familyTree, allFamilyMembers);
-        } else if (familyMember1.getStatus() == Status.PROTECTED && (isInFamilyTree(currentUser, familyMember1)) | isInFamilyTree(familyMember1, currentUser)) {
-            familyTree.add(familyMember1);
-            getChildList(currentUser, familyMember1, familyTree, allFamilyMembers);
+    public static void addChild(FamilyMember currentUser, List<FamilyMember> familyTree, FamilyMember child, List<FamilyMember> allFamilyMembers) {
+        if ((child.getStatus() == Status.PRIVATE | child.getStatus() == null) && child == currentUser) {
+            familyTree.add(child);
+            getChildList(currentUser, child, familyTree, allFamilyMembers);
+        } else if (child.getStatus() == Status.PUBLIC) {
+            familyTree.add(child);
+            getChildList(currentUser, child, familyTree, allFamilyMembers);
+        } else if (child.getStatus() == Status.PROTECTED && (isInFamilyTree(currentUser, child)) | isInFamilyTree(child, currentUser)) {
+            familyTree.add(child);
+            getChildList(currentUser, child, familyTree, allFamilyMembers);
         }
     }
 }
