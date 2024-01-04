@@ -1,8 +1,11 @@
 package com.application.familiarbre;
 
+import com.application.familiarbre.authentication.AuthenticationResponse;
 import com.application.familiarbre.authentication.AuthenticationService;
 import com.application.familiarbre.authentication.RegisterRequest;
+import com.application.familiarbre.models.entites.FamilyMember;
 import com.application.familiarbre.models.entites.Gender;
+import com.application.familiarbre.models.services.FamilyMemberService;
 import com.application.familiarbre.models.services.UserService;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
@@ -19,7 +22,8 @@ public class FamiliarbreApplication {
     @Bean
     public CommandLineRunner commandLineRunner(
             AuthenticationService service,
-            UserService userService
+            UserService userService,
+            FamilyMemberService familyMemberService
     ) {
         if (!userService.emailExists("user@mail.com")) {
             var user = RegisterRequest.builder()
@@ -31,20 +35,25 @@ public class FamiliarbreApplication {
                     .socialSecurityNumber("0102030405")
                     .birthDay("01/01/2000")
                     .build();
-            System.out.println("User token: " + service.register(user).getToken());
-        }
+            AuthenticationResponse response = service.register(user);
+            System.out.println("User token: " + response.getToken());
+            FamilyMember familyMemberUser = familyMemberService.getByUserId(response.getUserId());
 
-        if (!userService.emailExists("user2@mail.com")) {
-            var user2 = RegisterRequest.builder()
-                    .email("user2@mail.com")
-                    .password("password")
-                    .gender(Gender.female)
-                    .firstName("Sam")
-                    .lastName("Lebrise")
-                    .socialSecurityNumber("0201030405")
-                    .birthDay("02/01/2000")
-                    .build();
-            System.out.println("User2 token: " + service.register(user2).getToken());
+            if (!userService.emailExists("user2@mail.com")) {
+                var user2 = RegisterRequest.builder()
+                        .email("user2@mail.com")
+                        .password("password")
+                        .gender(Gender.female)
+                        .firstName("Sam")
+                        .lastName("Lebrise")
+                        .socialSecurityNumber("0201030405")
+                        .birthDay("02/01/2000")
+                        .build();
+                AuthenticationResponse responseUser2 = service.register(user2);
+                System.out.println("User2 token: " + responseUser2.getToken());
+                FamilyMember familyMemberUser2 = familyMemberService.getByUserId(responseUser2.getUserId());
+                familyMemberService.addChild(familyMemberUser, familyMemberUser2);
+            }
         }
 
         return null;
