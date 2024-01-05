@@ -24,11 +24,8 @@ public class FamilyMember implements Serializable {
     private String lastName;
     private Date birthDay;
     private Date deathDay;
-    @ManyToOne
-    @JoinColumn(name = "maried_id")
-    private FamilyMember maried;
-    @OneToMany(mappedBy = "maried")
-    List<FamilyMember> pids;
+    @ManyToMany
+    private List<FamilyMember> pids;
     private String socialSecurityNumber;
     @Enumerated(EnumType.STRING)
     private Gender gender;
@@ -52,11 +49,6 @@ public class FamilyMember implements Serializable {
             return deathDay;
         }
         return null;
-    }
-
-    public void addPid(FamilyMember pid){
-        this.pids.add(pid);
-        pid.setMaried(this);
     }
 
 }

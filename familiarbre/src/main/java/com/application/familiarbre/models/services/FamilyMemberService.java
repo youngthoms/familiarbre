@@ -126,7 +126,7 @@ public class FamilyMemberService {
                 System.out.println(i);
                 System.out.println(getById(i));
                 familyMemberList.add(getById(i));
-                fm.addPid(getById(i));
+
             }
 
             fm.setPids(familyMemberList);
