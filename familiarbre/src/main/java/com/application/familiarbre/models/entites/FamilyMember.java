@@ -54,4 +54,9 @@ public class FamilyMember implements Serializable {
         return null;
     }
 
+    public void addPid(FamilyMember pid){
+        this.pids.add(pid);
+        pid.setMaried(this);
+    }
+
 }

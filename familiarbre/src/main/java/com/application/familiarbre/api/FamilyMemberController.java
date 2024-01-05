@@ -52,9 +52,22 @@ public class FamilyMemberController {
 
         return ResponseEntity.ok(ApiResponse.builder().response("OK").build());
     }
+    @PostMapping("/update/")
+    public ResponseEntity<ApiResponse>update(@RequestBody UpdateRequest updateRequest){
+        System.out.println("acceder api");
+        String securitySocialNumber = updateRequest.getSocialSecurityNumber();
+        FamilyMember member = familyMemberService.getBySocialSecurityNumber(securitySocialNumber);
 
+        familyMemberService.update(member,updateRequest);
+
+        return ResponseEntity.status(HttpStatus.CREATED)
+                .body(ApiResponse.builder()
+                        .response("Update successfully.")
+                        .build());
+    }
     @PostMapping("/spouse/add")
     public ResponseEntity<ApiResponse> addSpouse(@RequestBody AddSpouseRequest addSpouseRequest){
+        System.out.println('e');
         FamilyMember member1 = familyMemberService.getById(addSpouseRequest.getMember1());
         FamilyMember member2 = familyMemberService.getById(addSpouseRequest.getMember2());
 

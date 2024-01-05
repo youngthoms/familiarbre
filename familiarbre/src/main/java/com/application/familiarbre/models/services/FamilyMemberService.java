@@ -1,5 +1,6 @@
 package com.application.familiarbre.models.services;
 
+import com.application.familiarbre.api.UpdateRequest;
 import com.application.familiarbre.models.dao.FamilyMemberRepository;
 import com.application.familiarbre.models.entites.*;
 import com.application.familiarbre.models.helper.FamilyTreeHelper;
@@ -7,6 +8,7 @@ import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -22,7 +24,7 @@ public class FamilyMemberService {
     }
 
     public FamilyMember getById(Long id) {
-        return repository.findById(id).orElseThrow();
+        return repository.findById(id).orElse(null);
     }
 
     public Optional<FamilyMember> getByUser(User user) {
@@ -65,6 +67,11 @@ public class FamilyMemberService {
         return FamilyTreeHelper.isInFamilyTree(user1, user2);
     }
 
+    public FamilyMember getBySocialSecurityNumber(String socialSecurityNumber){
+        Optional<FamilyMember> fm = repository.findBySocialSecurityNumber(socialSecurityNumber);
+        return fm.orElse(null);
+    }
+
     public FamilyMember getByUserId(Long userId) {
         Optional<FamilyMember> fm = repository.findByUserId(userId);
         return fm.orElse(null);
@@ -85,6 +92,67 @@ public class FamilyMemberService {
         addList.add(member1);
         member2.setPids(addList);
         repository.save(member2);
+    }
+
+    @Transactional
+    public void update(FamilyMember member, UpdateRequest updateRequest){
+        if (member == null){
+            FamilyMember fm = new FamilyMember();
+            fm.setSocialSecurityNumber(updateRequest.getSocialSecurityNumber());
+            if (getById(updateRequest.getMid())!= null){
+                fm.setMid(getById(updateRequest.getMid()));
+            }
+            else if (updateRequest.getMid()!=null){
+                FamilyMember mom = new FamilyMember();
+                fm.setMid(mom);
+                repository.save(mom);
+            }
+            if (getById(updateRequest.getFid())!=null){
+                fm.setFid(getById(updateRequest.getFid()));
+            }
+            else if (updateRequest.getFid()!=null){
+                FamilyMember dad = new FamilyMember();
+                fm.setFid(dad);
+                repository.save(dad);
+            }
+
+            fm.setGender(Gender.valueOf(updateRequest.getGender()));
+
+            fm.setFirstName(updateRequest.getName().split(" ")[0]);
+            fm.setLastName(updateRequest.getName().split(" ")[1]);
+
+            List<FamilyMember>familyMemberList = new ArrayList<>();
+            for (Long i : updateRequest.getPids()){
+                System.out.println(i);
+                System.out.println(getById(i));
+                familyMemberList.add(getById(i));
+                fm.addPid(getById(i));
+            }
+
+            fm.setPids(familyMemberList);
+            System.out.println(fm.getPids());
+            repository.save(fm);
+        }
+        else{
+            if(member.getFid()!= getById(updateRequest.getFid())){
+                member.setFid(getById(updateRequest.getFid()));
+            }
+            if(member.getMid()!= getById(updateRequest.getMid())){
+                member.setMid(getById(updateRequest.getMid()));
+            }
+            if (member.getFullName()!=updateRequest.getName()){
+                member.setFirstName(updateRequest.getName().split(" ")[0]);
+                member.setLastName(updateRequest.getName().split(" ")[1]);
+            }
+            List<FamilyMember>familyMemberList = new ArrayList<>();
+            for (Long i : updateRequest.getPids()){
+                familyMemberList.add(getById(i));
+            }
+            if(member.getPids()!=familyMemberList){
+                member.setPids(familyMemberList);
+            }
+            repository.save(member);
+        }
     }
 
     @Transactional
