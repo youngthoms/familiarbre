@@ -52,32 +52,33 @@ public class FamilyMemberController {
 
         return ResponseEntity.ok(ApiResponse.builder().response("OK").build());
     }
+
     @PostMapping("/update/")
-    public ResponseEntity<ApiResponse>update(@RequestBody UpdateRequest updateRequest){
+    public ResponseEntity<ApiResponse> update(@RequestBody UpdateRequest updateRequest) {
         System.out.println("acceder api");
         String securitySocialNumber = updateRequest.getSocialSecurityNumber();
         FamilyMember member = familyMemberService.getBySocialSecurityNumber(securitySocialNumber);
 
-        familyMemberService.update(member,updateRequest);
+        familyMemberService.update(member, updateRequest);
 
         return ResponseEntity.status(HttpStatus.CREATED)
                 .body(ApiResponse.builder()
                         .response("Update successfully.")
                         .build());
     }
+
     @PostMapping("/spouse/add")
-    public ResponseEntity<ApiResponse> addSpouse(@RequestBody AddSpouseRequest addSpouseRequest){
+    public ResponseEntity<ApiResponse> addSpouse(@RequestBody AddSpouseRequest addSpouseRequest) {
         System.out.println('e');
         FamilyMember member1 = familyMemberService.getById(addSpouseRequest.getMember1());
         FamilyMember member2 = familyMemberService.getById(addSpouseRequest.getMember2());
 
-        if (member1 ==null || member2 == null){
+        if (member1 == null || member2 == null) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND)
                     .body(ApiResponse.builder()
                             .response("Spouse not found")
                             .build());
-        }
-        else {
+        } else {
             try {
                 familyMemberService.addSpouse(member1, member2);
                 return ResponseEntity.status(HttpStatus.CREATED)
@@ -144,5 +145,18 @@ public class FamilyMemberController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                     .body(ApiResponse.builder().response("Error removing child: " + e.getMessage()).build());
         }
+    }
+
+    @GetMapping("/new")
+    public ResponseEntity<CreateFamilyMemberResponse> createFamilyMember() {
+        FamilyMember fm = familyMemberService.create();
+
+        return ResponseEntity
+                .status(HttpStatus.CREATED)
+                .body(CreateFamilyMemberResponse
+                                .builder()
+                                .id(fm.getId())
+                                .build()
+                );
     }
 }

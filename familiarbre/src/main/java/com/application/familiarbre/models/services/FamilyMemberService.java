@@ -213,4 +213,11 @@ public class FamilyMemberService {
         repository.save(child);
     }
 
+    @Transactional
+    public FamilyMember create() {
+        FamilyMember familyMember = new FamilyMember();
+
+        return repository.save(familyMember);
+    }
+
 }
