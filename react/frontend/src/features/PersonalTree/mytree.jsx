@@ -6,6 +6,11 @@ function MyTree({ nodes }) {
     const treeRef = useRef(null);
     const familyRef = useRef(null);
 
+    function convertToLong(id) {
+        const idString = typeof id === 'string' ? id : String(id);
+        return parseInt(idString.substring(0, 8), 16);
+    }
+
 
     useEffect(() => {
         const tree = new FamilyTree(treeRef.current, {
@@ -44,38 +49,19 @@ function MyTree({ nodes }) {
                 }
             }
         });
-        tree.generateId = async () => {
-            const url = `${import.meta.env.VITE_BASE_URL}/api/family-members/update/`;
-            try {
-                const response = await fetch(url, {
-                    method: 'GET',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'Authorization': `Bearer ${localStorage.getItem('jwtToken')}`,
-                    },
-                });
-
-                if(response.ok){
-                    const responseData = await response.json();
-                    return responseData.id;
-                } else {
-                    const textResponse = await response.text();
-                    throw new Error(textResponse || 'Failed to get new id from back');
-                }
-
-            } catch (error) {
-                console.error(`Failed to get new id from the server:`, error);
-            }
-        };
+        tree.generateId = () => uuidv4();
 
         tree.onUpdateNode(async (args) => {
             const formatNodeData = (nodeData) => {
-                console.log(nodeData.socialSecurityNumber);
+                console.log(typeof nodeData.id)
+                const idString = typeof nodeData.id === 'string' ? nodeData.id : String(nodeData.id);
+                console.log(typeof idString)
+                console.log("mon parseint", parseInt(idString.substring(0,8), 16) )
                 return {
-                    id: parseInt(nodeData.id, 10),
-                    pids: nodeData.pids || null,
-                    mid: nodeData.mid || null,
-                    fid: nodeData.fid || null,
+                    id: convertToLong(nodeData.id),
+                    pids: nodeData.pids ? nodeData.pids.map(pid => convertToLong(pid)) : null, // Convertir chaque élément de pids
+                    mid: nodeData.mid ? convertToLong(nodeData.mid) : null,
+                    fid: nodeData.fid ? convertToLong(nodeData.fid) : null,
                     name: nodeData.name || null,
                     socialSecurityNumber: nodeData.socialSecurityNumber || 'null',
                     gender: nodeData.gender,
