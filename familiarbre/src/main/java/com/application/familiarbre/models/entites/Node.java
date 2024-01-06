@@ -14,4 +14,5 @@ public class Node {
     private Long fid;
     private String name;
     private Gender gender;
+    private String socialSecurityNumber;
 }
