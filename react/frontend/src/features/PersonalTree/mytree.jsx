@@ -1,5 +1,6 @@
-import React, { useRef, useEffect } from 'react';
+import React, {useEffect, useRef} from 'react';
 import FamilyTree from '@balkangraph/familytree.js';
+import {v4 as uuidv4} from 'uuid';
 
 function MyTree({ nodes }) {
     const treeRef = useRef(null);
@@ -11,7 +12,7 @@ function MyTree({ nodes }) {
             nodeTreeMenu: true,
             nodeBinding: {
                 field_0: 'name',
-                field_1: 'securitySocialNumber',
+                field_1: 'socialSecurityNumber',
             },
             nodes: nodes,
             editForm: {
@@ -22,7 +23,7 @@ function MyTree({ nodes }) {
                 addMoreBtn: 'Add element',
                 addMoreFieldName: 'Element name',
                 elements: [
-                    { type: 'textbox', label: 'Security Social Number', binding: 'securitySocialNumber' },
+                    { type: 'textbox', label: 'Security Social Number', binding: 'socialSecurityNumber' },
                 ],
                 buttons: {
                     edit: {
@@ -43,15 +44,41 @@ function MyTree({ nodes }) {
                 }
             }
         });
+        tree.generateId = async () => {
+            const url = `${import.meta.env.VITE_BASE_URL}/api/family-members/update/`;
+            try {
+                const response = await fetch(url, {
+                    method: 'GET',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${localStorage.getItem('jwtToken')}`,
+                    },
+                });
+
+                if(response.ok){
+                    const responseData = await response.json();
+                    return responseData.id;
+                } else {
+                    const textResponse = await response.text();
+                    throw new Error(textResponse || 'Failed to get new id from back');
+                }
+
+            } catch (error) {
+                console.error(`Failed to get new id from the server:`, error);
+            }
+        };
+
         tree.onUpdateNode(async (args) => {
             const formatNodeData = (nodeData) => {
+                console.log(nodeData.socialSecurityNumber);
                 return {
-                    id: nodeData.id,
+                    id: parseInt(nodeData.id, 10),
                     pids: nodeData.pids || null,
                     mid: nodeData.mid || null,
                     fid: nodeData.fid || null,
                     name: nodeData.name || null,
-                    securitySocialNumber: nodeData.securitySocialNumber || '1234567890123'
+                    socialSecurityNumber: nodeData.socialSecurityNumber || 'null',
+                    gender: nodeData.gender,
                 };
             };
 
