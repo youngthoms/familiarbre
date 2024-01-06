@@ -11,7 +11,7 @@ function MyTree({ nodes }) {
             nodeTreeMenu: true,
             nodeBinding: {
                 field_0: 'name',
-                field_1: 'securityNumber',
+                field_1: 'securitySocialNumber',
             },
             nodes: nodes,
             editForm: {
@@ -22,7 +22,7 @@ function MyTree({ nodes }) {
                 addMoreBtn: 'Add element',
                 addMoreFieldName: 'Element name',
                 elements: [
-                    { type: 'textbox', label: 'Security Social Number', binding: 'securityNumber' },
+                    { type: 'textbox', label: 'Security Social Number', binding: 'securitySocialNumber' },
                 ],
                 buttons: {
                     edit: {
@@ -62,6 +62,7 @@ function MyTree({ nodes }) {
                     const url = `${import.meta.env.VITE_BASE_URL}/api/family-members/update/`;
                     try {
                         console.log("J'envoie ceci au back: " + JSON.stringify(formattedNode));
+                        console.log("le token que j'envoie :" + localStorage.getItem('jwtToken'))
                         const response = await fetch(url, {
                             method: 'POST',
                             headers: {

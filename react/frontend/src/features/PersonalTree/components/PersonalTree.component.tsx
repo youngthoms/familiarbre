@@ -60,7 +60,9 @@ export const PersonalTree: React.FC = (): React.ReactElement => {
                     throw new Error('Failed to load tree');
                 }
                 const tree = await response.json();
+                console.log("mon arbre" + tree);
                 setTreeData(tree);
+                console.log("mon arbre" + JSON.stringify(tree));
             } catch (error) {
                 console.error('Failed to fetch tree:', error);
             } finally {
