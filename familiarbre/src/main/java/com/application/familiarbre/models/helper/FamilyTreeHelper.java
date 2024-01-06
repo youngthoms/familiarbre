@@ -24,8 +24,8 @@ public class FamilyTreeHelper {
                 }
             }
             Long[] pidsArray = pids.toArray(new Long[0]);
-            System.out.println(fidId);
-            tree.add(new Node(i.getId(), midId, pidsArray, fidId, i.getFullName(), i.getGender()));
+
+            tree.add(new Node(i.getId(), midId, pidsArray, fidId, i.getFullName(), i.getGender(),i.getSocialSecurityNumber()));
         }
         return tree;
     }
