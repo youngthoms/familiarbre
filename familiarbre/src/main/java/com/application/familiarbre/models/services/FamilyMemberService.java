@@ -101,7 +101,7 @@ public class FamilyMemberService {
             if (updateRequest.getSocialSecurityNumber()!=null){
                 fm.setSocialSecurityNumber(updateRequest.getSocialSecurityNumber());
             }
-            if (getById(updateRequest.getMid())!= null){
+            if (updateRequest.getMid()!=null && getById(updateRequest.getMid())!= null){
                 fm.setMid(getById(updateRequest.getMid()));
             }
             else if (updateRequest.getMid()!=null){
@@ -110,7 +110,7 @@ public class FamilyMemberService {
                 fm.setMid(mom);
                 repository.save(mom);
             }
-            if (getById(updateRequest.getFid())!=null){
+            if (updateRequest.getFid()!=null && getById(updateRequest.getFid())!=null){
                 fm.setFid(getById(updateRequest.getFid()));
             }
             else if (updateRequest.getFid()!=null){
