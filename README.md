@@ -26,4 +26,4 @@ npm run dev
 ```
 
 ## Docs
-To read the API docs go to : localhost:8080/http://localhost:8080/swagger-ui/index.html
+To read the API docs go to : http://localhost:8080/swagger-ui/index.html
