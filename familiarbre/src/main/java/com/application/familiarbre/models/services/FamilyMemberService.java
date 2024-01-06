@@ -98,12 +98,15 @@ public class FamilyMemberService {
     public void update(FamilyMember member, UpdateRequest updateRequest){
         if (member == null){
             FamilyMember fm = new FamilyMember();
-            fm.setSocialSecurityNumber(updateRequest.getSocialSecurityNumber());
+            if (updateRequest.getSocialSecurityNumber()!=null){
+                fm.setSocialSecurityNumber(updateRequest.getSocialSecurityNumber());
+            }
             if (getById(updateRequest.getMid())!= null){
                 fm.setMid(getById(updateRequest.getMid()));
             }
             else if (updateRequest.getMid()!=null){
                 FamilyMember mom = new FamilyMember();
+                mom.setId(updateRequest.getMid());
                 fm.setMid(mom);
                 repository.save(mom);
             }
@@ -112,6 +115,7 @@ public class FamilyMemberService {
             }
             else if (updateRequest.getFid()!=null){
                 FamilyMember dad = new FamilyMember();
+                dad.setId(updateRequest.getFid());
                 fm.setFid(dad);
                 repository.save(dad);
             }
@@ -130,15 +134,24 @@ public class FamilyMemberService {
             }
 
             fm.setPids(familyMemberList);
-            System.out.println(fm.getPids());
             repository.save(fm);
         }
         else{
-            if(member.getFid()!= getById(updateRequest.getFid())){
+            if(updateRequest.getFid()!=null && member.getFid()!= getById(updateRequest.getFid())&& getById(updateRequest.getFid())!=null){
                 member.setFid(getById(updateRequest.getFid()));
             }
-            if(member.getMid()!= getById(updateRequest.getMid())){
+            else if (updateRequest.getFid()!=null && getById(updateRequest.getFid())!=null) {
+                FamilyMember dad = new FamilyMember();
+                member.setFid(dad);
+                repository.save(dad);
+            }
+            if(updateRequest.getMid()!=null && member.getMid()!= getById(updateRequest.getMid()) && getById(updateRequest.getMid())!=null){
                 member.setMid(getById(updateRequest.getMid()));
+            }
+            else if (updateRequest.getMid()!=null && getById(updateRequest.getMid())!=null) {
+                FamilyMember mom = new FamilyMember();
+                member.setMid(mom);
+                repository.save(mom);
             }
             if (member.getFullName()!=updateRequest.getName()){
                 member.setFirstName(updateRequest.getName().split(" ")[0]);
