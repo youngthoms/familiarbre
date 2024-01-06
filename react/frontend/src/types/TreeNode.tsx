@@ -4,5 +4,5 @@ export interface TreeNode {
     mid?: string | number;
     fid?: string | number;
     name: string;
-    img?: string;
+    securitySocialNumber: string;
 }

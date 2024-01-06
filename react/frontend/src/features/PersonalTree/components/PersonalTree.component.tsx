@@ -18,7 +18,7 @@ import {
     StyledHeader, StyledLayout,
     StyledSider
 } from "./PersonalTree.style";
-import MyTree from "../../../mytree.jsx";
+import MyTree from "../mytree.jsx";
 import {TreeNode} from "../../../types/TreeNode";
 import TreeVisibilityOptions from "./TreeVisibility.component";
 
