@@ -41,6 +41,7 @@ public class FamilyMemberService {
         Status targetStatus = target.getStatus();
 
         if (idCurrentUser == null && targetStatus == Status.PUBLIC) {
+            System.out.println("2");
             return getFamilyTree(idCurrentUser, idUserTarget);
         }
 
@@ -55,6 +56,10 @@ public class FamilyMemberService {
     }
 
     public List<Node> getFamilyTree(Long idCurrentUser, Long idUserTarget) {
+        if (idCurrentUser==null){
+            FamilyMember test = null;
+            return getFamilyTree(test, getById(idUserTarget));
+        }
         return getFamilyTree(getById(idCurrentUser), getById(idUserTarget));
     }
 

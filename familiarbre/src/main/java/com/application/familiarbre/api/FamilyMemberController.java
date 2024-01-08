@@ -40,13 +40,14 @@ public class FamilyMemberController {
 
     @GetMapping("/tree/{user_id_target}")
     public List<Node> getTree(@RequestParam(required = false) String token, @PathVariable Long user_id_target) {
+        System.out.println("on accede a la requete tree");
         FamilyMember familyMemberUserTarget = familyMemberService.getByUserId(user_id_target);
 
         if (token == null) {
-            if (familyMemberUserTarget.getStatus() == Status.PUBLIC) {
-                return familyMemberService.hasAccess(null, familyMemberUserTarget.getId());
-            }
+            System.out.println("titi");
+            return familyMemberService.hasAccess(null, familyMemberUserTarget.getId());
         }
+        System.out.println("14");
 
         User user = userService.loadUserByToken(token);
         FamilyMember familyMemberUserConnected = familyMemberService.getByUserId(user.getId());

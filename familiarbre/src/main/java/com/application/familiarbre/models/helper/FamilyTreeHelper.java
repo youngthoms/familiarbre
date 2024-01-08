@@ -11,8 +11,11 @@ public class FamilyTreeHelper {
 
     public static List<Node> getFamilyTree(FamilyMember currentUser, FamilyMember familyMember, List<FamilyMember> allFamilyMembers) {
         List<FamilyMember> familyTree = new ArrayList<FamilyMember>();
+        System.out.println("3");
         getParentsList(currentUser, familyMember, familyTree);
+        System.out.println(familyTree);
         getChildList(currentUser, familyMember, familyTree, allFamilyMembers);
+        System.out.println(familyTree);
         List<Node> tree = new ArrayList<>();
         for (FamilyMember i : familyTree) {
             Long midId = (i.getMid() != null && i.getMid().getStatus()!=Status.PRIVATE) ? i.getMid().getId() : null;
