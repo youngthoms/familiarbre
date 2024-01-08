@@ -1,0 +1,20 @@
+.home-container {
+    text-align: center;
+    padding: 20px;
+    /*background-color: #bfd1b5; */
+    background-color: #6bb77b;
+    border-radius: 10px;
+    font-weight: bold;
+}
+
+h1 {
+    /*color: #586d57; */
+    color: white;
+    margin-bottom: 20px;
+}
+
+.logo-form-image {
+    max-width: 5%;
+    height: 10%;
+    margin-bottom: 24px;
+}

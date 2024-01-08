@@ -5,6 +5,7 @@ export const FormContainer = styled.div`
     justify-content: center;
     align-items: center;
     height: 100vh;
+    color: white;
 
   .ant-form-item-control-input {
     padding: 4px 11px; // Ajustez cette valeur selon vos besoins pour augmenter le padding

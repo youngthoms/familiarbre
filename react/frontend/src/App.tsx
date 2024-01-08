@@ -3,31 +3,22 @@ import './App.css';
 import RegisterForm from "./features/Registration/components/RegisterForm.tsx";
 import PersonalTreeComponent from "./features/PersonalTree/components/PersonalTree.component.tsx";
 import LoginForm from "./features/SignIn/components/LoginForm.tsx";
+import Home from "./components/Home.component.tsx";
 
-const NavigationLinks = () => {
-    const location = useLocation();
-
-    if (location.pathname !== '/') {
-        return null;
-    }
-
-    return (
-        <nav>
-            <Link to="/register">S'inscrire</Link>
-            <Link to="/login">Se connecter</Link>
-        </nav>
-    );
-};
 
 function App() {
     return (
+
         <Router>
+            <link rel="preconnect" href="https://fonts.googleapis.com"/>
+            <link rel="preconnect" href="https://fonts.gstatic.com"/>
+            <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@200&display=swap" rel="stylesheet"/>
             <div>
-                <NavigationLinks />
+                <Home/>
                 <Routes>
-                    <Route path="/register" element={<RegisterForm />} />
-                    <Route path="/login" element={<LoginForm />} />
-                    <Route path="/personaltree" element={<PersonalTreeComponent />} />
+                    <Route path="/register" element={<RegisterForm/>}/>
+                    <Route path="/login" element={<LoginForm/>}/>
+                    <Route path="/personaltree" element={<PersonalTreeComponent/>}/>
                     {/* Ajoute ici la route vers ton composant de connexion */}
                 </Routes>
             </div>
