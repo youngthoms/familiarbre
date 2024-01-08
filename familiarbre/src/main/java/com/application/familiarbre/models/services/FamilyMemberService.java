@@ -3,6 +3,7 @@ package com.application.familiarbre.models.services;
 import com.application.familiarbre.api.UpdateRequest;
 import com.application.familiarbre.models.dao.FamilyMemberRepository;
 import com.application.familiarbre.models.entites.*;
+import com.application.familiarbre.models.helper.FamilyMemberHelper;
 import com.application.familiarbre.models.helper.FamilyTreeHelper;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -21,6 +22,10 @@ public class FamilyMemberService {
 
     public List<FamilyMember> getAll() {
         return repository.findAll();
+    }
+
+    public List<FamilyMember> getAllPublic() {
+        return repository.findByStatus(Status.PUBLIC);
     }
 
     public FamilyMember getById(Long id) {
@@ -211,6 +216,11 @@ public class FamilyMemberService {
         child.setFid(null);
 
         repository.save(child);
+    }
+
+    @Transactional
+    public FamilyMember save(FamilyMember fm) {
+        return repository.save(fm);
     }
 
     @Transactional

@@ -1,6 +1,6 @@
 import { Button, DatePicker, Form, Input, Select } from 'antd';
 import useRegister from "../hooks/useRegister.ts";
-import './RegisterForm.css'
+import '../styles/RegisterForm.css'
 
 const dateFormat = 'DD/MM/YYYY';
 

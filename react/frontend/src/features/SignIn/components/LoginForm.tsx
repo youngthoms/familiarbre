@@ -1,6 +1,6 @@
 import { Button, Form, Input } from 'antd';
 import useLogin from "../hooks/useLogin";
-import './LoginForm.css';
+import '../styles/LoginForm.css';
 
 const LoginForm = () => {
     const [form] = Form.useForm();

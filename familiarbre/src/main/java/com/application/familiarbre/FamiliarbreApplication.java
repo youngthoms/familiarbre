@@ -39,6 +39,8 @@ public class FamiliarbreApplication {
             AuthenticationResponse response = service.register(user);
             System.out.println("User token: " + response.getToken());
             FamilyMember familyMemberUser = familyMemberService.getByUserId(response.getUserId());
+            familyMemberUser.setStatus(Status.PUBLIC);
+            familyMemberService.save(familyMemberUser);
 
             if (!userService.emailExists("user2@mail.com")) {
                 var user2 = RegisterRequest.builder()
@@ -54,6 +56,7 @@ public class FamiliarbreApplication {
                 System.out.println("User2 token: " + responseUser2.getToken());
                 FamilyMember familyMemberUser2 = familyMemberService.getByUserId(responseUser2.getUserId());
                 familyMemberUser2.setStatus(Status.PUBLIC);
+                familyMemberUser.setStatus(Status.PUBLIC);
                 familyMemberService.addChild(familyMemberUser, familyMemberUser2);
             }
         }

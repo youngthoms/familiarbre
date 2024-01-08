@@ -1,6 +1,8 @@
 package com.application.familiarbre.api;
 
 import com.application.familiarbre.models.entites.*;
+import com.application.familiarbre.models.helper.FamilyMemberHelper;
+import com.application.familiarbre.models.helper.FamilyTreeHelper;
 import com.application.familiarbre.models.services.FamilyMemberService;
 import com.application.familiarbre.models.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,11 +24,18 @@ public class FamilyMemberController {
     UserService userService;
 
     @GetMapping("/all")
-    public List<FamilyMember> all(Model model) {
-        List<FamilyMember> familyMembers = familyMemberService.getAll();
-        model.addAttribute("familyMembers", familyMembers);
+    public ResponseEntity<AllFamilyMembersResponse> allFamilyMembers() {
+        List<FamilyMember> familyMembers = familyMemberService.getAllPublic();
+        List<PublicFamilyMember> publicFamilyMembers = FamilyMemberHelper.familyMembersToPublicFamilyMembers(familyMembers);
 
-        return familyMembers;
+        return ResponseEntity
+                .status(HttpStatus.FOUND)
+                .body(
+                        AllFamilyMembersResponse
+                                .builder()
+                                .familyMembers(publicFamilyMembers)
+                                .build()
+                );
     }
 
     @GetMapping("/tree/{token}/{user_id_target}")
