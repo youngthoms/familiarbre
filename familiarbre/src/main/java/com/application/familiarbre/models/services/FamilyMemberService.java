@@ -37,11 +37,18 @@ public class FamilyMemberService {
     }
 
     public List<Node> hasAccess(Long idCurrentUser, Long idUserTarget) {
-        if (getById(idUserTarget).getStatus() == Status.PUBLIC || getById(idUserTarget).getStatus() == null) {
+        FamilyMember target = getById(idUserTarget);
+        Status targetStatus = target.getStatus();
+
+        if (idCurrentUser == null && targetStatus == Status.PUBLIC) {
             return getFamilyTree(idCurrentUser, idUserTarget);
-        } else if (getById(idUserTarget).getStatus() == Status.PROTECTED && (isInFamilyTree(getById(idCurrentUser), getById(idCurrentUser)) | isInFamilyTree(getById(idUserTarget), getById(idCurrentUser)))) {
+        }
+
+        if (targetStatus == Status.PUBLIC || targetStatus == null) {
             return getFamilyTree(idCurrentUser, idUserTarget);
-        } else if ((getById(idUserTarget).getStatus() == Status.PRIVATE) && (Objects.equals(idUserTarget, idCurrentUser))) {
+        } else if (targetStatus == Status.PROTECTED && (isInFamilyTree(getById(idCurrentUser), getById(idCurrentUser)) | isInFamilyTree(target, getById(idCurrentUser)))) {
+            return getFamilyTree(idCurrentUser, idUserTarget);
+        } else if ((targetStatus == Status.PRIVATE) && (Objects.equals(idUserTarget, idCurrentUser))) {
             return getFamilyTree(idCurrentUser, idUserTarget);
         }
         throw new org.springframework.security.access.AccessDeniedException("403 returned");

@@ -29,7 +29,7 @@ public class FamilyMemberController {
         List<PublicFamilyMember> publicFamilyMembers = FamilyMemberHelper.familyMembersToPublicFamilyMembers(familyMembers);
 
         return ResponseEntity
-                .status(HttpStatus.FOUND)
+                .status(HttpStatus.OK)
                 .body(
                         AllFamilyMembersResponse
                                 .builder()
@@ -38,14 +38,22 @@ public class FamilyMemberController {
                 );
     }
 
-    @GetMapping("/tree/{token}/{user_id_target}")
-    public List<Node> getTree(@PathVariable String token, @PathVariable Long user_id_target) {
+    @GetMapping("/tree/{user_id_target}")
+    public List<Node> getTree(@RequestParam(required = false) String token, @PathVariable Long user_id_target) {
+        FamilyMember familyMemberUserTarget = familyMemberService.getByUserId(user_id_target);
+
+        if (token == null) {
+            if (familyMemberUserTarget.getStatus() == Status.PUBLIC) {
+                return familyMemberService.hasAccess(null, familyMemberUserTarget.getId());
+            }
+        }
+
         User user = userService.loadUserByToken(token);
         FamilyMember familyMemberUserConnected = familyMemberService.getByUserId(user.getId());
-        FamilyMember familyMemberUserTarget = familyMemberService.getByUserId(user_id_target);
 
         return familyMemberService.hasAccess(familyMemberUserConnected.getId(), familyMemberUserTarget.getId());
     }
+
 
     @GetMapping("/id/{id}")
     public FamilyMember byId(@PathVariable Long id) {

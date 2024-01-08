@@ -69,7 +69,11 @@ public class FamilyTreeHelper {
     public static boolean isInFamilyTree(FamilyMember user1, FamilyMember user2) {
         if (user1 == user2) {
             return true;
-        } else {
+        }
+        else if (user1 == null || user2 == null) {
+            return false;
+        }
+        else {
             boolean momResult = false;
             boolean dadResult = false;
 

@@ -46,14 +46,14 @@ export const PersonalTree: React.FC = (): JSX.Element => {
         console.log(token);
         console.log(userId);
 
-        if (token && userId) {
+        if (userId) {
             try {
-                // @ts-ignore
-                const response = await fetch(`${import.meta.env.VITE_BASE_URL}/api/family-members/tree/${token}/${userId}`, {
+                const queryParams = token ? `?token=${encodeURIComponent(token)}` : '';
+                const response = await fetch(`${import.meta.env.VITE_BASE_URL}/api/family-members/tree/${userId}${queryParams}`, {
                     method: 'GET',
                     headers: {
                         'Content-Type': 'application/json',
-                        'Authorization': `Bearer ${token}`,
+                        ...(token && { 'Authorization': `Bearer ${token}` }),
                     },
                 });
                 if (!response.ok) {
@@ -63,7 +63,6 @@ export const PersonalTree: React.FC = (): JSX.Element => {
                 setTreeData(tree);
             } catch (error) {
                 console.error('Failed to fetch tree:', error);
-                // Traitez l'erreur comme vous le souhaitez
             } finally {
                 setLoadingTree(false);
             }

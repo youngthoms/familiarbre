@@ -28,6 +28,7 @@ public class SecurityConfiguration {
     private static final AntPathRequestMatcher[] WHITE_LIST_URL = {
             new AntPathRequestMatcher("/"),
             new AntPathRequestMatcher("/api/auth/**"),
+            new AntPathRequestMatcher("/api/family-members/{token}/{user_id_target}"),
             new AntPathRequestMatcher("/api/family-members/all"),
             new AntPathRequestMatcher("/v2/api-docs"),
             new AntPathRequestMatcher("/v3/api-docs"),
