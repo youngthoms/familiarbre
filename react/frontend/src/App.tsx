@@ -18,7 +18,8 @@ function App() {
                 <Routes>
                     <Route path="/register" element={<RegisterForm/>}/>
                     <Route path="/login" element={<LoginForm/>}/>
-                    <Route path="/personaltree" element={<PersonalTreeComponent/>}/>
+                    <Route path="/personaltree:id" element={<PersonalTreeComponent/>}/>
+                    <Route path="/personaltree" element={<PersonalTreeComponent />} /> {/* Keep the existing route without id */}
                     {/* Ajoute ici la route vers ton composant de connexion */}
                 </Routes>
             </div>

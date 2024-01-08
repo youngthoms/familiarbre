@@ -20,6 +20,7 @@ import {
 } from "./PersonalTree.style";
 import MyTree from "../../../mytree.jsx";
 import {TreeNode} from "../../../types/TreeNode";
+import {useParams} from "react-router-dom";
 
 const items: MenuProps['items'] = [
     UserOutlined,
@@ -39,10 +40,11 @@ const items: MenuProps['items'] = [
 export const PersonalTree: React.FC = (): JSX.Element => {
     const [treeData, setTreeData] = useState<TreeNode[]>([]);
     const [loadingTree, setLoadingTree] = useState(true);
+    const { id } = useParams<{ id: string }>();
 
     const loadUserTree = async () => {
         const token = localStorage.getItem('jwtToken');
-        const userId = localStorage.getItem('userId');
+        const userId = id || localStorage.getItem('userId'); // Use URL id if available, otherwise fall back to localStorage
         console.log(token);
         console.log(userId);
 

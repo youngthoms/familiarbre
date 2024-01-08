@@ -10,7 +10,7 @@ public class FamilyMemberHelper {
     private static PublicFamilyMember familyMemberToPublicFamilyMember(FamilyMember fm) {
         return PublicFamilyMember
                 .builder()
-                .id(fm.getId())
+                .id(fm.getUser().getId())
                 .fullName(fm.getFullName())
                 .status(fm.getStatus())
                 .gender(fm.getGender())
