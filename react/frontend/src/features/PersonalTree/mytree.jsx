@@ -13,6 +13,7 @@ function MyTree({ nodes }) {
 
 
     useEffect(() => {
+        console.log("mon arbre dans MyTree" + JSON.stringify(nodes))
         const tree = new FamilyTree(treeRef.current, {
             nodeTreeMenu: true,
             nodeBinding: {
@@ -28,6 +29,7 @@ function MyTree({ nodes }) {
                 addMoreBtn: 'Add element',
                 addMoreFieldName: 'Element name',
                 elements: [
+                    { type: 'textbox', label: 'Security Social Number', binding: 'socialSecurityNumber' },
                     { type: 'textbox', label: 'Security Social Number', binding: 'socialSecurityNumber' },
                 ],
                 buttons: {
@@ -67,6 +69,36 @@ function MyTree({ nodes }) {
                     gender: nodeData.gender,
                 };
             };
+
+            // if(args.addNodesData){
+            //     for(const nodeData of args.addNodesData){
+            //         if(nodeData.fid != null || nodeData.mid != null){
+            //             const url = `${import.meta.env.VITE_BASE_URL}/api/family-members/child/add`;
+            //             try {
+            //                 console.log("J'envoie ceci au back pour le fils: " + JSON.stringify(formattedNode));
+            //                 const response = await fetch(url, {
+            //                     method: 'POST',
+            //                     headers: {
+            //                         'Content-Type': 'application/json',
+            //                         'Authorization': `Bearer ${localStorage.getItem('jwtToken')}`,
+            //                     },
+            //                     body: JSON.stringify(formattedNode),
+            //                 });
+            //
+            //                 if (response.ok && response.headers.get('Content-Type')?.includes('application/json')) {
+            //                     const responseData = await response.json();
+            //                     console.log("Mise à jour de la relation réussie :", responseData);
+            //                 } else {
+            //                     const textResponse = await response.text();
+            //                     throw new Error(textResponse || 'Failed to update');
+            //                 }
+            //
+            //             } catch (error) {
+            //                 console.error(`Failed to send relation update to the server:`, error);
+            //             }
+            //         }                    }
+            //     }
+            //     console.log("j'ajoute ce node" + JSON.stringify(args.addNodesData))
 
             if(args.updateNodesData){
                 for (const nodeData of args.updateNodesData) {

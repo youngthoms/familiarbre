@@ -120,26 +120,22 @@ public class FamilyMemberService {
             if (updateRequest.getMid()!=null && getById(updateRequest.getMid())!= null){
                 fm.setMid(getById(updateRequest.getMid()));
             }
-            else if (updateRequest.getMid()!=null){
-                FamilyMember mom = new FamilyMember();
-                mom.setId(updateRequest.getMid());
-                fm.setMid(mom);
-                repository.save(mom);
+            else if (updateRequest.getMid()!=null && getById(updateRequest.getMid())!=null){
+                fm.setMid(getById(updateRequest.getMid()));
+                System.out.println("mon fm et pas le fn" + fm);
             }
             if (updateRequest.getFid()!=null && getById(updateRequest.getFid())!=null){
                 fm.setFid(getById(updateRequest.getFid()));
             }
-            else if (updateRequest.getFid()!=null){
-                FamilyMember dad = new FamilyMember();
-                dad.setId(updateRequest.getFid());
-                fm.setFid(dad);
-                repository.save(dad);
+            else if (updateRequest.getMid()!=null && getById(updateRequest.getMid())!=null){
+                fm.setFid(getById(updateRequest.getFid()));
             }
 
             fm.setGender(Gender.valueOf(updateRequest.getGender()));
-
-            fm.setFirstName(updateRequest.getName().split(" ")[0]);
-            fm.setLastName(updateRequest.getName().split(" ")[1]);
+            if(updateRequest.getName() != null){
+                fm.setFirstName(updateRequest.getName().split(" ")[0]);
+                fm.setLastName(updateRequest.getName().split(" ")[1]);
+            }
 
             List<FamilyMember>familyMemberList = new ArrayList<>();
             for (Long i : updateRequest.getPids()){
@@ -151,23 +147,33 @@ public class FamilyMemberService {
             repository.save(fm);
         }
         else{
-            if(updateRequest.getFid()!=null && member.getFid()!= getById(updateRequest.getFid())&& getById(updateRequest.getFid())!=null){
+            if(updateRequest.getFid()!=null && (member.getFid()==null || member.getFid().getId()!= updateRequest.getFid()) && getById(updateRequest.getFid())!=null){
                 member.setFid(getById(updateRequest.getFid()));
             }
-            else if (updateRequest.getFid()!=null && getById(updateRequest.getFid())!=null) {
+            else if (updateRequest.getFid()!=null && member.getFid()==null) {
                 FamilyMember dad = new FamilyMember();
-                member.setFid(dad);
+                dad.setGender(Gender.male);
                 repository.save(dad);
+                member.setFid(dad);
             }
-            if(updateRequest.getMid()!=null && member.getMid()!= getById(updateRequest.getMid()) && getById(updateRequest.getMid())!=null){
+            if(updateRequest.getMid()!=null && (member.getMid()==null || member.getMid().getId()!= updateRequest.getMid()) && getById(updateRequest.getMid())!=null){
                 member.setMid(getById(updateRequest.getMid()));
             }
-            else if (updateRequest.getMid()!=null && getById(updateRequest.getMid())!=null) {
+            else if (updateRequest.getMid()!=null && member.getMid()==null) {
                 FamilyMember mom = new FamilyMember();
-                member.setMid(mom);
+                mom.setGender(Gender.female);
                 repository.save(mom);
+                member.setMid(mom);
             }
-            if (member.getFullName()!=updateRequest.getName()){
+            if(member.getMid()!=null && member.getFid()!=null){
+                FamilyMember mom = member.getMid();
+                FamilyMember dad = member.getFid();
+
+                mom.addPid(dad);
+                dad.addPid(mom);
+            }
+            if (updateRequest.getName()!=null && member.getFullName()!=updateRequest.getName()){
+                System.out.println("voldemort"+updateRequest.getName());
                 member.setFirstName(updateRequest.getName().split(" ")[0]);
                 member.setLastName(updateRequest.getName().split(" ")[1]);
             }
