@@ -1,4 +1,4 @@
-import React, { useRef, useEffect } from 'react';
+import React, {useRef, useEffect} from 'react';
 import FamilyTree from '@balkangraph/familytree.js';
 
 function MyTree({ nodes }) {
