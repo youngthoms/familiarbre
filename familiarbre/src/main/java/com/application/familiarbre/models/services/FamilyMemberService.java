@@ -41,7 +41,6 @@ public class FamilyMemberService {
         Status targetStatus = target.getStatus();
 
         if (idCurrentUser == null && targetStatus == Status.PUBLIC) {
-            System.out.println("2");
             return getFamilyTree(idCurrentUser, idUserTarget);
         }
 
@@ -144,8 +143,6 @@ public class FamilyMemberService {
 
             List<FamilyMember>familyMemberList = new ArrayList<>();
             for (Long i : updateRequest.getPids()){
-                System.out.println(i);
-                System.out.println(getById(i));
                 familyMemberList.add(getById(i));
 
             }

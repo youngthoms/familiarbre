@@ -40,14 +40,11 @@ public class FamilyMemberController {
 
     @GetMapping("/tree/{user_id_target}")
     public List<Node> getTree(@RequestParam(required = false) String token, @PathVariable Long user_id_target) {
-        System.out.println("on accede a la requete tree");
         FamilyMember familyMemberUserTarget = familyMemberService.getByUserId(user_id_target);
 
         if (token == null) {
-            System.out.println("titi");
             return familyMemberService.hasAccess(null, familyMemberUserTarget.getId());
         }
-        System.out.println("14");
 
         User user = userService.loadUserByToken(token);
         FamilyMember familyMemberUserConnected = familyMemberService.getByUserId(user.getId());
@@ -71,9 +68,8 @@ public class FamilyMemberController {
         return ResponseEntity.ok(ApiResponse.builder().response("OK").build());
     }
 
-    @PostMapping("/update/")
+    @PostMapping("/update")
     public ResponseEntity<ApiResponse> update(@RequestBody UpdateRequest updateRequest) {
-        System.out.println("acceder api");
         String securitySocialNumber = updateRequest.getSocialSecurityNumber();
         FamilyMember member = familyMemberService.getBySocialSecurityNumber(securitySocialNumber);
 
@@ -87,7 +83,6 @@ public class FamilyMemberController {
 
     @PostMapping("/spouse/add")
     public ResponseEntity<ApiResponse> addSpouse(@RequestBody AddSpouseRequest addSpouseRequest) {
-        System.out.println('e');
         FamilyMember member1 = familyMemberService.getById(addSpouseRequest.getMember1());
         FamilyMember member2 = familyMemberService.getById(addSpouseRequest.getMember2());
 
