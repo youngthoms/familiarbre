@@ -1,9 +1,10 @@
-import { BrowserRouter as Router, Routes, Route, Link, useLocation } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import './App.css';
 import RegisterForm from "./features/Registration/components/RegisterForm.tsx";
 import PersonalTreeComponent from "./features/PersonalTree/components/PersonalTree.component.tsx";
 import LoginForm from "./features/SignIn/components/LoginForm.tsx";
 import Home from "./components/Home.component.tsx";
+import PublicTreeComponent from "./features/PublicTree/components/PublicTree.component.tsx";
 
 
 function App() {
@@ -18,8 +19,8 @@ function App() {
                 <Routes>
                     <Route path="/register" element={<RegisterForm/>}/>
                     <Route path="/login" element={<LoginForm/>}/>
-                    <Route path="/personaltree:id" element={<PersonalTreeComponent/>}/>
-                    <Route path="/personaltree" element={<PersonalTreeComponent />} /> {/* Keep the existing route without id */}
+                    <Route path="/personaltree" element={<PersonalTreeComponent />}/> {/* Keep the existing route without id */}
+                    <Route path="/publictree/:id" element={<PublicTreeComponent/>}/>
                     {/* Ajoute ici la route vers ton composant de connexion */}
                 </Routes>
             </div>

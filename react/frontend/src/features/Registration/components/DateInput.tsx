@@ -4,7 +4,7 @@ import { Input } from 'antd';
 const DateInput = () => {
     const [value, setValue] = useState('');
 
-    const handleChange = (e) => {
+    const handleChange = (e: { target: { value: string; }; }) => {
         let inputValue = e.target.value.replace(/[^\d]/g, ''); // Enlevez tout caractère non-numérique
         // Format: DD/MM/YYYY
         if (inputValue.length > 4) {

@@ -12,16 +12,16 @@ import {
 } from '@ant-design/icons';
 import {Menu, Layout} from 'antd';
 import type {MenuProps} from 'antd';
+import MyTree from "../../../mytree.jsx";
+import {TreeNode} from "../../../types/TreeNode";
+import {useParams} from "react-router-dom";
 import {
     ContentContainer,
     StyledContent,
-    StyledHeader, StyledLayout,
+    StyledHeader,
+    StyledLayout,
     StyledSider
-} from "./PersonalTree.style";
-import MyTree from "../../../mytree.jsx";
-import {TreeNode} from "../../../types/TreeNode";
-import TreeVisibilityOptions from "./TreeVisibility.component";
-
+} from "../../PersonalTree/components/PersonalTree.style.tsx";
 
 const items: MenuProps['items'] = [
     UserOutlined,
@@ -38,23 +38,18 @@ const items: MenuProps['items'] = [
     label: `nav ${index + 1}`,
 }));
 
-export const PersonalTree: React.FC = (): React.ReactElement => {
+export const PublicTree: React.FC = (): JSX.Element => {
     const [treeData, setTreeData] = useState<TreeNode[]>([]);
     const [loadingTree, setLoadingTree] = useState(true);
+    const {id} = useParams<{ id: string }>();
 
     const loadUserTree = async () => {
-        const token = localStorage.getItem('jwtToken');
-        const userId = localStorage.getItem('userId');
+        const userId = id;
 
-        if (token && userId) {
+        if (userId) {
             try {
-                const queryParams = token ? `?token=${encodeURIComponent(token)}` : '';
-                const response = await fetch(`${import.meta.env.VITE_BASE_URL}/api/family-members/tree/${userId}${queryParams}`, {
+                const response = await fetch(`${import.meta.env.VITE_BASE_URL}/api/family-members/tree/${userId}`, {
                     method: 'GET',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        ...(token && {'Authorization': `Bearer ${token}`}),
-                    },
                 });
                 if (!response.ok) {
                     throw new Error('Failed to load tree');
@@ -83,7 +78,6 @@ export const PersonalTree: React.FC = (): React.ReactElement => {
                 <StyledHeader/>
                 <StyledContent>
                     <ContentContainer>
-                        <TreeVisibilityOptions/>
                         {!loadingTree && treeData.length > 0 && (
                             <div style={{height: "100%"}}>
                                 <MyTree nodes={treeData}/>
@@ -96,4 +90,4 @@ export const PersonalTree: React.FC = (): React.ReactElement => {
     );
 };
 
-export default PersonalTree;
+export default PublicTree;

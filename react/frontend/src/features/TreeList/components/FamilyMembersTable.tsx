@@ -1,5 +1,5 @@
-import { useState, useEffect } from 'react';
-import { Table } from 'antd';
+import {useState, useEffect} from 'react';
+import {Table} from 'antd';
 
 type FamilyMember = {
     id: number;
@@ -43,8 +43,8 @@ const FamilyMembersTable: React.FC = () => {
             title: 'Full Name',
             dataIndex: 'fullName',
             key: 'fullName',
-            render: (text: string, record: FamilyMember) => (
-                <a href={`/personaltree/${record.id}`} target="_blank" rel="noopener noreferrer">
+            render: (_text: string, record: FamilyMember) => (
+                <a href={`/publictree/${record.id}`} rel="noopener noreferrer">
                     {record.fullName}
                 </a>
             ),
@@ -53,7 +53,7 @@ const FamilyMembersTable: React.FC = () => {
     ];
 
     return (
-        <div style={{ padding: '20px' }}>
+        <div style={{padding: '20px'}}>
             <Table<FamilyMember>
                 dataSource={familyMembers}
                 columns={columns}
