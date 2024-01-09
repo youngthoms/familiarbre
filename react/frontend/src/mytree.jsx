@@ -1,9 +1,15 @@
-import React, { useRef, useEffect } from 'react';
+import React, {useEffect, useRef} from 'react';
 import FamilyTree from '@balkangraph/familytree.js';
+import {v4 as uuidv4} from 'uuid';
 
 function MyTree({ nodes }) {
     const treeRef = useRef(null);
     const familyRef = useRef(null);
+
+    function convertToLong(id) {
+        const idString = typeof id === 'string' ? id : String(id);
+        return parseInt(idString.substring(0, 8), 16);
+    }
 
 
     useEffect(() => {
@@ -11,70 +17,87 @@ function MyTree({ nodes }) {
             nodeTreeMenu: true,
             nodeBinding: {
                 field_0: 'name',
-                field_1: 'securityNumber',
-                img_0: 'img'
+                field_1: 'socialSecurityNumber',
             },
-            nodes: nodes
+            nodes: nodes,
+            editForm: {
+                titleBinding: "name",
+                photoBinding: "photo",
+                generateElementsFromFields: false,
+                addMore: 'Add more elements',
+                addMoreBtn: 'Add element',
+                addMoreFieldName: 'Element name',
+                elements: [
+                    { type: 'textbox', label: 'Security Social Number', binding: 'socialSecurityNumber' },
+                ],
+                buttons: {
+                    edit: {
+                        icon: FamilyTree.icon.edit(24, 24, '#fff'),
+                        text: 'Edit',
+                        hideIfEditMode: true,
+                        hideIfDetailsMode: false
+                    },
+                    share: {
+                        icon: FamilyTree.icon.share(24, 24, '#fff'),
+                        text: 'Share'
+                    },
+                    pdf: {
+                        icon: FamilyTree.icon.pdf(24, 24, '#fff'),
+                        text: 'Save as PDF'
+                    },
+                    remove: null
+                }
+            }
         });
+        tree.generateId = () => uuidv4();
+
         tree.onUpdateNode(async (args) => {
-            // Gérer l'ajout de nouveaux nœuds
-            if (args.addNodesData) {
-                for (const newNode of args.addNodesData) {
-                    if (newNode.mid || newNode.fid) { // Si un enfant a été ajouté
-                        await sendRelationUpdate('child', newNode.mid || newNode.fid, newNode.id);
-                    } else if (newNode.pids && newNode.pids.length > 0) { // Si un partenaire a été ajouté
-                        for (const partnerId of newNode.pids) {
-                            await sendRelationUpdate('partner', newNode.id, partnerId);
+            const formatNodeData = (nodeData) => {
+                console.log(typeof nodeData.id)
+                const idString = typeof nodeData.id === 'string' ? nodeData.id : String(nodeData.id);
+                console.log(typeof idString)
+                console.log("mon parseint", parseInt(idString.substring(0,8), 16) )
+                return {
+                    id: convertToLong(nodeData.id),
+                    pids: nodeData.pids ? nodeData.pids.map(pid => convertToLong(pid)) : null, // Convertir chaque élément de pids
+                    mid: nodeData.mid ? convertToLong(nodeData.mid) : null,
+                    fid: nodeData.fid ? convertToLong(nodeData.fid) : null,
+                    name: nodeData.name || null,
+                    socialSecurityNumber: nodeData.socialSecurityNumber || 'null',
+                    gender: nodeData.gender,
+                };
+            };
+
+            if(args.updateNodesData){
+                for (const nodeData of args.updateNodesData) {
+                    const formattedNode = formatNodeData(nodeData);
+                    const url = `${import.meta.env.VITE_BASE_URL}/api/family-members/update`;
+                    try {
+                        console.log("J'envoie ceci au back: " + JSON.stringify(formattedNode));
+                        console.log("le token que j'envoie :" + localStorage.getItem('jwtToken'))
+                        const response = await fetch(`${import.meta.env.VITE_BASE_URL}/api/family-members/update`, {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json',
+                                'Authorization': `Bearer ${localStorage.getItem('jwtToken')}`,
+                            },
+                            body: JSON.stringify(formattedNode),
+                        });
+
+                        if (response.ok && response.headers.get('Content-Type')?.includes('application/json')) {
+                            const responseData = await response.json();
+                            console.log("Mise à jour de la relation réussie :", responseData);
+                        } else {
+                            const textResponse = await response.text();
+                            throw new Error(textResponse || 'Failed to update');
                         }
+
+                    } catch (error) {
+                        console.error(`Failed to send relation update to the server:`, error);
                     }
                 }
             }
-
-            // Gérer la suppression de nœuds
-            if (args.removeNodesData) {
-                for (const removedNode of args.removeNodesData) {
-                    await sendRelationUpdate('remove', removedNode.id);
-                }
-            }
         });
-
-// Fonction pour envoyer la mise à jour de la relation ou la suppression au back-end
-        async function sendRelationUpdate(relationType, sourceId, targetId = null) {
-            let url;
-            let postData;
-
-            if (relationType === 'remove') {
-                url = `${import.meta.env.VITE_BASE_URL}/api/family-members/remove`;
-                postData = { id: sourceId };
-            } else {
-                url = `${import.meta.env.VITE_BASE_URL}/api/family-members/${relationType}/add`;
-                postData = {
-                    parentId: sourceId, // Pour 'child', ceci est l'ID du parent
-                    childId: targetId,  // Pour 'child', ceci est l'ID de l'enfant
-                };
-            }
-
-            try {
-                const response = await fetch(url, {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'Authorization': `Bearer ${localStorage.getItem('jwtToken')}`,
-                    },
-                    body: JSON.stringify(postData),
-                });
-
-                const responseData = await response.json();
-                if (!response.ok) {
-                    throw new Error(responseData.message || `Failed to ${relationType === 'remove' ? 'remove' : 'add'} relation`);
-                }
-
-                console.log(`${relationType} relation update successfully:`, responseData);
-            } catch (error) {
-                console.error(`Failed to send ${relationType} relation update to the server:`, error);
-            }
-        }
-
 
         tree.onUpdateNode((args) => {
             console.log(args.addNodesData);
