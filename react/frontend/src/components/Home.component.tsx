@@ -1,6 +1,6 @@
 import './Home.css';
-import NavigationLinks from "./NavigationLinks.component.tsx";
-import FamilyMembersTable from "../features/TreeList/components/FamilyMembersTable.tsx";
+import NavigationLinks from "./NavigationLinks.component";
+import FamilyMembersTable from "../features/TreeList/components/FamilyMembersTable";
 
 const Home = () => {
     return (

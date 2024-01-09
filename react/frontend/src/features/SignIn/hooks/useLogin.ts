@@ -11,6 +11,7 @@ const useLogin = () => {
     const [error, setError] = useState<string | null>(null);
     const navigate = useNavigate(); // Ajout de useNavigate
 
+
     const signIn = async (formData: SignInFormData) => {
         setIsLoading(true);
         try {
@@ -29,6 +30,8 @@ const useLogin = () => {
             console.log(data);
             localStorage.setItem('jwtToken', data.token);
             localStorage.setItem('userId', data.userId);
+            localStorage.setItem('firstName', data.firstName);
+            localStorage.setItem('lastName', data.lastName);
             navigate('/personaltree');
             console.log("tudo bem");
         } catch (err) {
