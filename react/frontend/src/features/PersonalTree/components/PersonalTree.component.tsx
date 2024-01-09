@@ -10,7 +10,7 @@ import {
     UserOutlined,
     VideoCameraOutlined,
 } from '@ant-design/icons';
-import {Menu, Button, Layout} from 'antd';
+import {Menu, Layout} from 'antd';
 import type { MenuProps } from 'antd';
 import {
     ContentContainer,
@@ -21,6 +21,8 @@ import {
 import MyTree from "../../../mytree.jsx";
 import {TreeNode} from "../../../types/TreeNode";
 import {useParams} from "react-router-dom";
+import TreeVisibilityOptions from "./TreeVisibility.component";
+
 
 const items: MenuProps['items'] = [
     UserOutlined,
@@ -37,7 +39,7 @@ const items: MenuProps['items'] = [
     label: `nav ${index + 1}`,
 }));
 
-export const PersonalTree: React.FC = (): JSX.Element => {
+export const PersonalTree: React.FC = (): React.ReactElement => {
     const [treeData, setTreeData] = useState<TreeNode[]>([]);
     const [loadingTree, setLoadingTree] = useState(true);
     const { id } = useParams<{ id: string }>();
@@ -51,6 +53,7 @@ export const PersonalTree: React.FC = (): JSX.Element => {
         if (userId) {
             try {
                 const queryParams = token ? `?token=${encodeURIComponent(token)}` : '';
+                // @ts-ignore
                 const response = await fetch(`${import.meta.env.VITE_BASE_URL}/api/family-members/tree/${userId}${queryParams}`, {
                     method: 'GET',
                     headers: {
@@ -85,6 +88,7 @@ export const PersonalTree: React.FC = (): JSX.Element => {
                 <StyledHeader />
                 <StyledContent>
                     <ContentContainer>
+                        <TreeVisibilityOptions/>
                         {!loadingTree && treeData.length > 0 && (
                             <div style={{ height: "100%" }}>
                                 <MyTree nodes={treeData} />
