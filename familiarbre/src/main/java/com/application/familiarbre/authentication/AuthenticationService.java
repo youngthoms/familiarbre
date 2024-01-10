@@ -36,6 +36,7 @@ public class AuthenticationService {
         LocalDate localDate = LocalDate.parse(dateString, formatter);
         return java.sql.Date.valueOf(localDate);
     }
+
     public AuthenticationResponse register(RegisterRequest request) {
         var user = User.builder()
                 .email(request.getEmail())
@@ -62,7 +63,7 @@ public class AuthenticationService {
 //        var refreshToken = jwtService.generateRefreshToken(user);
         saveUserToken(user, jwtToken);
 
-        return AuthenticationResponse.builder().token(jwtToken).userId(user.getId()).build();
+        return AuthenticationResponse.builder().token(jwtToken).userId(user.getId()).name(familyMember.getFullName()).build();
     }
 
     public AuthenticationResponse authenticate(AuthenticationRequest request) {
@@ -75,12 +76,13 @@ public class AuthenticationService {
 
         // TODO : refine the exception
         var user = userRepository.findByEmail(request.getEmail()).orElseThrow();
+        var familyMember = familyMemberRepository.findByUserId(user.getId()).orElseThrow();
         var jwtToken = jwtService.generateToken(user);
 //        var refreshToken = jwtService.generateRefreshToken(user);
 //        revokeAllUserTokens(user);
         saveUserToken(user, jwtToken);
 
-        return AuthenticationResponse.builder().token(jwtToken).userId(user.getId()).build();
+        return AuthenticationResponse.builder().token(jwtToken).userId(user.getId()).name(familyMember.getFullName()).build();
     }
 
     private void saveUserToken(User user, String jwtToken) {
