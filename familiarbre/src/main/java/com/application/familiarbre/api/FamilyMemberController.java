@@ -115,80 +115,59 @@ public class FamilyMemberController {
     @PostMapping("/child/add")
     public ResponseEntity<ApiResponse> addChild(@RequestBody AddChildRequest addChildRequest) {
         FamilyMember child = null;
+
         if (addChildRequest.getChildId() != null) {
             child = familyMemberService.getById(addChildRequest.getChildId());
         }
-        FamilyMember parent = null;
-
-        if (addChildRequest.getParentId() != null) {
-            parent = familyMemberService.getById(addChildRequest.getParentId());
+        FamilyMember dad = null;
+        if (addChildRequest.getDadId() != null) {
+            dad = familyMemberService.getById(addChildRequest.getDadId());
+        }
+        FamilyMember mom = null;
+        if (addChildRequest.getMomId() != null) {
+            mom = familyMemberService.getById(addChildRequest.getMomId());
         }
 
-        if (parent == null && child == null) {
-            System.out.println("le parent" + parent);
-            System.out.println("l'enfant" + child);
-            return ResponseEntity.status(HttpStatus.NOT_FOUND)
-                    .body(ApiResponse.builder()
-                            .response("Parent or child not found.")
-                            .build());
-        }
-        else if (parent == null) {
-            if (child.getMid() == null) {
-                System.out.println("maman");
-                FamilyMember mom = new FamilyMember();
-                mom.setGender(Gender.female);
-                familyMemberService.save(mom);
-                child.setMid(mom);
-            }
-            if (child.getFid() == null) {
-                System.out.println("papa");
-                FamilyMember dad = new FamilyMember();
-                dad.setGender(Gender.male);
-                System.out.println(dad);
-                familyMemberService.save(dad);
-                child.setFid(dad);
-                System.out.println(child);
-            }
-        }
-        else if (child == null) {
+        if (child == null) {
             child = new FamilyMember();
-            if (parent.getGender().equals(Gender.female)) {
-                if (child.getMid() != null) {
-                    // Handle the case where a mother is already set
-                    throw new IllegalStateException("Child already has a mother set");
-                }
-                child.setMid(parent);
-            }
-
-            // Setting father
-            if (parent.getGender().equals(Gender.male)) {
-                if (child.getFid() != null) {
-                    // Handle the case where a father is already set
-                    throw new IllegalStateException("Child already has a father set");
-                }
-                child.setFid(parent);
-            }
-            familyMemberService.save(child);
+        }
+        if (addChildRequest.getGender()==Gender.male){
+            child.setGender(Gender.male);
         }
         else {
-            try {
-                familyMemberService.addChild(parent, child);
-                return ResponseEntity.status(HttpStatus.CREATED)
-                        .body(ApiResponse.builder()
-                                .response("Child added to parent successfully.")
-                                .build());
-            } catch (IllegalStateException e) {
-                return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-                        .body(ApiResponse.builder()
-                                .response(e.getMessage())
-                                .build());
-            } catch (Exception e) {
-                return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                        .body(ApiResponse.builder()
-                                .response("An error occurred while adding the child.")
-                                .build());
-            }
+            child.setGender(Gender.female);
         }
+        if (mom == null )
+        {
+            System.out.println("maman");
+            mom = new FamilyMember();
+            mom.setGender(Gender.female);
+            familyMemberService.save(mom);
+            System.out.println(mom+"mom");
+
+            System.out.println(child+"child");
+        }
+        child.setMid(mom);
+        if (dad == null )   {
+            System.out.println("papa");
+            dad = new FamilyMember();
+            dad.setGender(Gender.male);
+            System.out.println(dad);
+            familyMemberService.save(dad);
+
+            System.out.println(child);
+
+        }
+        child.setFid(dad);
+
+        if(mom!=null && dad!=null){
+            mom.addPid(dad);
+            dad.addPid(mom);
+        }
+
+        familyMemberService.save(child);
+
+
         return ResponseEntity.status(HttpStatus.CREATED)
                 .body(ApiResponse.builder()
                         .response("Child added to parent successfully.")

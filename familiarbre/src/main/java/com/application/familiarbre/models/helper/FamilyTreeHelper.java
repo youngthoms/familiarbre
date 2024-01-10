@@ -94,10 +94,10 @@ public class FamilyTreeHelper {
     }
 
     public static void addChild(FamilyMember currentUser, List<FamilyMember> familyTree, FamilyMember child, List<FamilyMember> allFamilyMembers) {
-        if ((child.getStatus() == Status.PRIVATE | child.getStatus() == null) && child == currentUser) {
+        if ((child.getStatus() == Status.PRIVATE) && child == currentUser) {
             familyTree.add(child);
             getChildList(currentUser, child, familyTree, allFamilyMembers);
-        } else if (child.getStatus() == Status.PUBLIC) {
+        } else if (child.getStatus() == Status.PUBLIC  | child.getStatus() == null) {
             familyTree.add(child);
             getChildList(currentUser, child, familyTree, allFamilyMembers);
         } else if (child.getStatus() == Status.PROTECTED && (isInFamilyTree(currentUser, child)) | isInFamilyTree(child, currentUser)) {
