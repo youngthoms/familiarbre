@@ -17,15 +17,21 @@ public class FamilyTreeHelper {
         for (FamilyMember i : familyTree) {
             Long midId = (i.getMid() != null && i.getMid().getStatus()!=Status.PRIVATE) ? i.getMid().getId() : null;
             Long fidId = (i.getFid() != null && i.getFid().getStatus()!=Status.PRIVATE) ? i.getFid().getId() : null;
-            List<Long> pids = new ArrayList<>();
-            if (i.getPids() != null) {
+            List<Long> pidsList = new ArrayList<>();
+
+            if (i.getPids().size()!=0) {
+                System.out.println(i.getPids().size()+"la taille compte");
                 for (FamilyMember j : i.getPids()) {
-                    pids.add(j.getId());
+
+                    pidsList.add(j.getId());
+                    Long[] iIdArray = new Long[]{i.getId()};
+                    tree.add(new Node(j.getId(),null,iIdArray,null,j.getFullName(),j.getGender(),j.getSocialSecurityNumber()));
                 }
             }
-            Long[] pidsArray = pids.toArray(new Long[0]);
 
-            tree.add(new Node(i.getId(), midId, pidsArray, fidId, i.getFullName(), i.getGender(),i.getSocialSecurityNumber()));
+            Long[] iPids = pidsList.toArray(new Long[0]);
+
+            tree.add(new Node(i.getId(), midId, iPids, fidId, i.getFullName(), i.getGender(),i.getSocialSecurityNumber()));
         }
         return tree;
     }

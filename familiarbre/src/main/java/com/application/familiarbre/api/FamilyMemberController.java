@@ -125,6 +125,8 @@ public class FamilyMemberController {
         }
 
         if (parent == null && child == null) {
+            System.out.println("le parent" + parent);
+            System.out.println("l'enfant" + child);
             return ResponseEntity.status(HttpStatus.NOT_FOUND)
                     .body(ApiResponse.builder()
                             .response("Parent or child not found.")

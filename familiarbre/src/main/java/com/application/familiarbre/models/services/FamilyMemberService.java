@@ -177,7 +177,7 @@ public class FamilyMemberService {
                 member.setFirstName(updateRequest.getName().split(" ")[0]);
                 member.setLastName(updateRequest.getName().split(" ")[1]);
             }
-            List<FamilyMember>familyMemberList = new ArrayList<>();
+
             for (Long i : updateRequest.getPids()){
                 if (i!=null && getById(i)==null){
                     if(member.getGender()==Gender.male){
