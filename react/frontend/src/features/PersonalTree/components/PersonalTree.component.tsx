@@ -18,7 +18,7 @@ import {
     StyledHeader, StyledLayout,
     StyledSider
 } from "./PersonalTree.style";
-import MyTree from "../../../mytree.jsx";
+import MyTree from "../mytree.jsx";
 import {TreeNode} from "../../../types/TreeNode";
 import TreeVisibilityOptions from "./TreeVisibility.component";
 
@@ -61,6 +61,10 @@ export const PersonalTree: React.FC = (): React.ReactElement => {
                 }
                 const tree = await response.json();
                 setTreeData(tree);
+                console.log("mon arbre" + JSON.stringify(tree));
+                console.log("COUCOU !!");
+                console.log("TRIPLE MOOOOOONSTRE !!");
+                console.log(treeData)
             } catch (error) {
                 console.error('Failed to fetch tree:', error);
             } finally {

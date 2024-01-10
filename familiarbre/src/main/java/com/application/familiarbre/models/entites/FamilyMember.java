@@ -5,6 +5,7 @@ import lombok.*;
 
 import java.io.Serializable;
 import java.sql.Date;
+import java.util.ArrayList;
 import java.util.List;
 
 @Data
@@ -51,4 +52,19 @@ public class FamilyMember implements Serializable {
         return null;
     }
 
+    public List<FamilyMember> getPids() {
+        if (this.pids==null){
+            this.setPids(new ArrayList<FamilyMember>());
+        }
+        return pids;
+    }
+
+    public void addPid(FamilyMember pid){
+        if (this.pids==null){
+            this.setPids(new ArrayList<FamilyMember>());
+        }
+        if (!this.getPids().contains(pid)) {
+            this.getPids().add(pid);
+        }
+    }
 }

@@ -68,7 +68,7 @@ public class FamilyMemberController {
         return ResponseEntity.ok(ApiResponse.builder().response("OK").build());
     }
 
-    @PostMapping("/update")
+    @PostMapping("/update/")
     public ResponseEntity<ApiResponse> update(@RequestBody UpdateRequest updateRequest) {
         String securitySocialNumber = updateRequest.getSocialSecurityNumber();
         FamilyMember member = familyMemberService.getBySocialSecurityNumber(securitySocialNumber);
