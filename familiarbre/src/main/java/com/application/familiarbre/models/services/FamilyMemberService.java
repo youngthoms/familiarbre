@@ -179,11 +179,24 @@ public class FamilyMemberService {
             }
             List<FamilyMember>familyMemberList = new ArrayList<>();
             for (Long i : updateRequest.getPids()){
-                familyMemberList.add(getById(i));
+                if (i!=null && getById(i)==null){
+                    if(member.getGender()==Gender.male){
+                        FamilyMember wife = new FamilyMember();
+                        wife.setGender(Gender.female);
+                        wife.addPid(member);
+                        repository.save(wife);
+                        member.addPid(wife);
+                    }
+                    else{
+                        FamilyMember husband = new FamilyMember();
+                        husband.setGender(Gender.male);
+                        husband.addPid(member);
+                        repository.save(husband);
+                        member.addPid(husband);
+                    }
+                }
             }
-            if(member.getPids()!=familyMemberList){
-                member.setPids(familyMemberList);
-            }
+
             repository.save(member);
         }
     }

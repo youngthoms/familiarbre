@@ -114,34 +114,85 @@ public class FamilyMemberController {
 
     @PostMapping("/child/add")
     public ResponseEntity<ApiResponse> addChild(@RequestBody AddChildRequest addChildRequest) {
-        FamilyMember parent = familyMemberService.getById(addChildRequest.getParentId());
-        FamilyMember child = familyMemberService.getById(addChildRequest.getChildId());
+        FamilyMember child = null;
+        if (addChildRequest.getChildId() != null) {
+            child = familyMemberService.getById(addChildRequest.getChildId());
+        }
+        FamilyMember parent = null;
 
-        if (parent == null || child == null) {
+        if (addChildRequest.getParentId() != null) {
+            parent = familyMemberService.getById(addChildRequest.getParentId());
+        }
+
+        if (parent == null && child == null) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND)
                     .body(ApiResponse.builder()
                             .response("Parent or child not found.")
                             .build());
         }
-
-        try {
-            familyMemberService.addChild(parent, child);
-            return ResponseEntity.status(HttpStatus.CREATED)
-                    .body(ApiResponse.builder()
-                            .response("Child added to parent successfully.")
-                            .build());
-        } catch (IllegalStateException e) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-                    .body(ApiResponse.builder()
-                            .response(e.getMessage())
-                            .build());
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body(ApiResponse.builder()
-                            .response("An error occurred while adding the child.")
-                            .build());
+        else if (parent == null) {
+            if (child.getMid() == null) {
+                System.out.println("maman");
+                FamilyMember mom = new FamilyMember();
+                mom.setGender(Gender.female);
+                familyMemberService.save(mom);
+                child.setMid(mom);
+            }
+            if (child.getFid() == null) {
+                System.out.println("papa");
+                FamilyMember dad = new FamilyMember();
+                dad.setGender(Gender.male);
+                System.out.println(dad);
+                familyMemberService.save(dad);
+                child.setFid(dad);
+                System.out.println(child);
+            }
         }
+        else if (child == null) {
+            child = new FamilyMember();
+            if (parent.getGender().equals(Gender.female)) {
+                if (child.getMid() != null) {
+                    // Handle the case where a mother is already set
+                    throw new IllegalStateException("Child already has a mother set");
+                }
+                child.setMid(parent);
+            }
+
+            // Setting father
+            if (parent.getGender().equals(Gender.male)) {
+                if (child.getFid() != null) {
+                    // Handle the case where a father is already set
+                    throw new IllegalStateException("Child already has a father set");
+                }
+                child.setFid(parent);
+            }
+            familyMemberService.save(child);
+        }
+        else {
+            try {
+                familyMemberService.addChild(parent, child);
+                return ResponseEntity.status(HttpStatus.CREATED)
+                        .body(ApiResponse.builder()
+                                .response("Child added to parent successfully.")
+                                .build());
+            } catch (IllegalStateException e) {
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                        .body(ApiResponse.builder()
+                                .response(e.getMessage())
+                                .build());
+            } catch (Exception e) {
+                return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                        .body(ApiResponse.builder()
+                                .response("An error occurred while adding the child.")
+                                .build());
+            }
+        }
+        return ResponseEntity.status(HttpStatus.CREATED)
+                .body(ApiResponse.builder()
+                        .response("Child added to parent successfully.")
+                        .build());
     }
+
 
     @DeleteMapping("/child/remove/{childId}")
     public ResponseEntity<ApiResponse> removeChild(@PathVariable Long childId) {
