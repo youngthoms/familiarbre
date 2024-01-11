@@ -8,8 +8,12 @@ function MyTree({ nodes }) {
 
     function convertToLong(id) {
         const idString = typeof id === 'string' ? id : String(id);
-        return parseInt(idString.substring(0, 8), 16);
+        if (idString.length > 4) {
+            return parseInt(idString.substring(0, 8), 16);
+        }
+        return id;
     }
+
 
 
     useEffect(() => {
@@ -18,7 +22,7 @@ function MyTree({ nodes }) {
             nodeTreeMenu: true,
             nodeBinding: {
                 field_0: 'name',
-                field_1: 'socialSecurityNumber',
+                field_1: 'id',
             },
             nodes: nodes,
             editForm: {
@@ -30,7 +34,7 @@ function MyTree({ nodes }) {
                 addMoreFieldName: 'Element name',
                 elements: [
                     { type: 'textbox', label: 'Security Social Number', binding: 'socialSecurityNumber' },
-                    { type: 'textbox', label: 'Security Social Number', binding: 'socialSecurityNumber' },
+                    { type: 'textbox', label: 'id', binding: 'id' },
                 ],
                 buttons: {
                     edit: {
@@ -58,7 +62,7 @@ function MyTree({ nodes }) {
                 console.log(typeof nodeData.id)
                 const idString = typeof nodeData.id === 'string' ? nodeData.id : String(nodeData.id);
                 console.log(typeof idString)
-                console.log("mon parseint", parseInt(idString.substring(0,8), 16) )
+                console.log("mon parseint", parseInt(idString.substring(0, 8), 16))
                 return {
                     id: convertToLong(nodeData.id),
                     pids: nodeData.pids ? nodeData.pids.map(pid => convertToLong(pid)) : null, // Convertir chaque élément de pids
@@ -69,38 +73,7 @@ function MyTree({ nodes }) {
                     gender: nodeData.gender,
                 };
             };
-
-            // if(args.addNodesData){
-            //     for(const nodeData of args.addNodesData){
-            //         if(nodeData.fid != null || nodeData.mid != null){
-            //             const url = `${import.meta.env.VITE_BASE_URL}/api/family-members/child/add`;
-            //             try {
-            //                 console.log("J'envoie ceci au back pour le fils: " + JSON.stringify(formattedNode));
-            //                 const response = await fetch(url, {
-            //                     method: 'POST',
-            //                     headers: {
-            //                         'Content-Type': 'application/json',
-            //                         'Authorization': `Bearer ${localStorage.getItem('jwtToken')}`,
-            //                     },
-            //                     body: JSON.stringify(formattedNode),
-            //                 });
-            //
-            //                 if (response.ok && response.headers.get('Content-Type')?.includes('application/json')) {
-            //                     const responseData = await response.json();
-            //                     console.log("Mise à jour de la relation réussie :", responseData);
-            //                 } else {
-            //                     const textResponse = await response.text();
-            //                     throw new Error(textResponse || 'Failed to update');
-            //                 }
-            //
-            //             } catch (error) {
-            //                 console.error(`Failed to send relation update to the server:`, error);
-            //             }
-            //         }                    }
-            //     }
-            //     console.log("j'ajoute ce node" + JSON.stringify(args.addNodesData))
-
-            if(args.updateNodesData){
+            if (args.updateNodesData) {
                 for (const nodeData of args.updateNodesData) {
                     const formattedNode = formatNodeData(nodeData);
                     // console.log("avant le stringify" + nodeData);
@@ -130,12 +103,60 @@ function MyTree({ nodes }) {
                     }
                 }
             }
+            // console.log(args.addNodesData);
+            // console.log(args.updateNodesData);
         });
 
-        tree.onUpdateNode((args) => {
-            console.log(args.addNodesData);
-            console.log(args.updateNodesData);
+        tree.onUpdateNode(async (args) => {
+
+            if(args.addNodesData){
+                await new Promise(r => setTimeout(r, 1000));
+                console.log("les objets que je parcours" + JSON.stringify(args.addNodesData))
+                for(const nodeData of args.addNodesData){
+                    if(nodeData.fid != null && nodeData.mid != null){
+                        const momId = convertToLong(nodeData.mid);
+                        const dadId = convertToLong(nodeData.fid);
+                        const childId = convertToLong(nodeData.id);
+                        const url = `${import.meta.env.VITE_BASE_URL}/api/family-members/child/add`;
+                        try {
+                            console.log("J'envoie ceci au back pour le fils: " + JSON.stringify({
+                                momId: momId,
+                                dadId: dadId,
+                                childid: childId,
+                            }));
+                            const response = await fetch(url, {
+                                method: 'POST',
+                                headers: {
+                                    'Content-Type': 'application/json',
+                                    'Authorization': `Bearer ${localStorage.getItem('jwtToken')}`,
+                                },
+                                body: JSON.stringify({
+                                    momId: momId,
+                                    dadId: dadId,
+                                    childid: childId,
+                                    gender: nodeData.gender,
+                                }),
+                            });
+
+                            if (response.ok && response.headers.get('Content-Type')?.includes('application/json')) {
+                                const responseData = await response.json();
+                                console.log("Mise à jour de la relation réussie :", responseData);
+                                // window.location.reload();
+                            } else {
+                                const textResponse = await response.text();
+                                throw new Error(textResponse || 'Failed to update');
+                            }
+
+                        } catch (error) {
+                            console.error(`Failed to send relation update to the server:`, error);
+                        }
+                    }
+                }
+                console.log("j'ajoute ce node" + JSON.stringify(args.addNodesData));
+            }
         });
+
+
 
         return () => {
             if (familyRef.current) {
