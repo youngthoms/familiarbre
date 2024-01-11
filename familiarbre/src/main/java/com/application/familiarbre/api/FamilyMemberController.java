@@ -70,8 +70,8 @@ public class FamilyMemberController {
 
     @PostMapping("/update/")
     public ResponseEntity<ApiResponse> update(@RequestBody UpdateRequest updateRequest) {
-        String securitySocialNumber = updateRequest.getSocialSecurityNumber();
-        FamilyMember member = familyMemberService.getBySocialSecurityNumber(securitySocialNumber);
+
+        FamilyMember member = familyMemberService.getById(updateRequest.getId());
 
         familyMemberService.update(member, updateRequest);
 
@@ -120,16 +120,16 @@ public class FamilyMemberController {
             child = familyMemberService.getById(addChildRequest.getChildId());
         }
         FamilyMember dad = null;
-        boolean dad_exist = false;
+
         if (addChildRequest.getDadId() != null) {
             dad = familyMemberService.getById(addChildRequest.getDadId());
-            dad_exist = false;
+
         }
         FamilyMember mom = null;
-        boolean mom_exist = false;
+
         if (addChildRequest.getMomId() != null) {
             mom = familyMemberService.getById(addChildRequest.getMomId());
-            mom_exist = false;
+
         }
 
         if (child == null) {
@@ -155,10 +155,9 @@ public class FamilyMemberController {
             dad.setGender(Gender.male);
             System.out.println(dad);
             familyMemberService.save(dad);
-
         }
         child.setFid(dad);
-        if (mom.getPids().size()>0){
+        if (!mom.getPids().isEmpty()){
             List temp = mom.getPids();
             temp.remove(mom.getPids().size()-1);
             mom.setPids(temp);
@@ -167,7 +166,7 @@ public class FamilyMemberController {
                 System.out.println("supprimer pids mom"+fm.getId());
             }
         }
-        if (dad.getPids().size()<0){
+        if (!dad.getPids().isEmpty()){
             List temp = dad.getPids();
             dad.getPids().remove(dad.getPids().size()-1);
             dad.setPids(temp);
