@@ -134,48 +134,34 @@ public class FamilyMemberController {
         if (child == null) {
             child = new FamilyMember();
         }
-        if (addChildRequest.getGender()==Gender.male){
+        if (addChildRequest.getGender() == Gender.male) {
             child.setGender(Gender.male);
-        }
-        else {
+        } else {
             child.setGender(Gender.female);
         }
-        if (mom == null )
-        {
-            System.out.println("maman");
+        if (mom == null) {
             mom = new FamilyMember();
             mom.setGender(Gender.female);
             familyMemberService.save(mom);
         }
         child.setMid(mom);
-        if (dad == null )   {
-            System.out.println("papa");
+        if (dad == null) {
             dad = new FamilyMember();
             dad.setGender(Gender.male);
-            System.out.println(dad);
             familyMemberService.save(dad);
         }
         child.setFid(dad);
-        if (!mom.getPids().isEmpty()){
+        if (!mom.getPids().isEmpty()) {
             List temp = mom.getPids();
-            temp.remove(mom.getPids().size()-1);
+            temp.remove(mom.getPids().size() - 1);
             mom.setPids(temp);
-            for (FamilyMember fm:mom.getPids()
-            ) {
-                System.out.println("supprimer pids mom"+fm.getId());
-            }
         }
-        if (!dad.getPids().isEmpty()){
+        if (!dad.getPids().isEmpty()) {
             List temp = dad.getPids();
-            dad.getPids().remove(dad.getPids().size()-1);
+            dad.getPids().remove(dad.getPids().size() - 1);
             dad.setPids(temp);
-            for (FamilyMember fm:dad.getPids()
-                 ) {
-                System.out.println("supprimer pids dad"+fm.getId());
-            }
-
         }
-        if(mom!=null && dad!=null){
+        if (mom != null && dad != null) {
             mom.addPid(dad);
             dad.addPid(mom);
         }

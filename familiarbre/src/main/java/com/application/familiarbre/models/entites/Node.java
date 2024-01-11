@@ -15,4 +15,5 @@ public class Node {
     private String name;
     private Gender gender;
     private String socialSecurityNumber;
+    private String birthDay;
 }

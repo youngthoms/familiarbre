@@ -4,6 +4,7 @@ import com.application.familiarbre.models.entites.FamilyMember;
 import com.application.familiarbre.models.entites.Node;
 import com.application.familiarbre.models.entites.Status;
 
+import java.sql.Date;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -15,23 +16,31 @@ public class FamilyTreeHelper {
         getChildList(currentUser, familyMember, familyTree, allFamilyMembers);
         List<Node> tree = new ArrayList<>();
         for (FamilyMember i : familyTree) {
-            Long midId = (i.getMid() != null && i.getMid().getStatus()!=Status.PRIVATE) ? i.getMid().getId() : null;
-            Long fidId = (i.getFid() != null && i.getFid().getStatus()!=Status.PRIVATE) ? i.getFid().getId() : null;
+            Long midId = (i.getMid() != null && i.getMid().getStatus() != Status.PRIVATE) ? i.getMid().getId() : null;
+            Long fidId = (i.getFid() != null && i.getFid().getStatus() != Status.PRIVATE) ? i.getFid().getId() : null;
             List<Long> pidsList = new ArrayList<>();
 
-            if (i.getPids().size()!=0) {
-                System.out.println(i.getPids().size()+"la taille compte");
+            if (i.getPids().size() != 0) {
                 for (FamilyMember j : i.getPids()) {
 
                     pidsList.add(j.getId());
                     Long[] iIdArray = new Long[]{i.getId()};
-                    tree.add(new Node(j.getId(),null,iIdArray,null,j.getFullName(),j.getGender(),j.getSocialSecurityNumber()));
+                    Date birthdayDate = j.getBirthDay();
+                    String birthday = "";
+                    if (birthdayDate != null) {
+                        birthday = birthdayDate.toString();
+                    }
+                    tree.add(new Node(j.getId(), null, iIdArray, null, j.getFullName(), j.getGender(), j.getSocialSecurityNumber(), birthday));
                 }
             }
 
             Long[] iPids = pidsList.toArray(new Long[0]);
-
-            tree.add(new Node(i.getId(), midId, iPids, fidId, i.getFullName(), i.getGender(),i.getSocialSecurityNumber()));
+            Date birthdayDate = i.getBirthDay();
+            String birthday = "";
+            if (birthdayDate != null) {
+                birthday = birthdayDate.toString();
+            }
+            tree.add(new Node(i.getId(), midId, iPids, fidId, i.getFullName(), i.getGender(), i.getSocialSecurityNumber(), birthday));
         }
         return tree;
     }
@@ -40,7 +49,7 @@ public class FamilyTreeHelper {
         if (familyMember != null) {
             familyTree.add(familyMember);
             if (familyMember.getMid() != null) {
-                if ((familyMember.getMid().getStatus() == Status.PRIVATE ) && familyMember.getMid() == currentUser) {
+                if ((familyMember.getMid().getStatus() == Status.PRIVATE) && familyMember.getMid() == currentUser) {
                     getParentsList(currentUser, familyMember.getMid(), familyTree);
                 } else if (familyMember.getMid().getStatus() == Status.PUBLIC | familyMember.getMid().getStatus() == null) {
                     getParentsList(currentUser, familyMember.getMid(), familyTree);
@@ -49,7 +58,7 @@ public class FamilyTreeHelper {
                 }
             }
             if (familyMember.getFid() != null) {
-                if ((familyMember.getFid().getStatus() == Status.PRIVATE ) && familyMember.getFid() == currentUser) {
+                if ((familyMember.getFid().getStatus() == Status.PRIVATE) && familyMember.getFid() == currentUser) {
                     getParentsList(currentUser, familyMember.getFid(), familyTree);
                 } else if (familyMember.getFid().getStatus() == Status.PUBLIC | familyMember.getFid().getStatus() == null) {
                     getParentsList(currentUser, familyMember.getFid(), familyTree);
@@ -75,11 +84,9 @@ public class FamilyTreeHelper {
     public static boolean isInFamilyTree(FamilyMember user1, FamilyMember user2) {
         if (user1 == user2) {
             return true;
-        }
-        else if (user1 == null || user2 == null) {
+        } else if (user1 == null || user2 == null) {
             return false;
-        }
-        else {
+        } else {
             boolean momResult = false;
             boolean dadResult = false;
 
@@ -97,7 +104,7 @@ public class FamilyTreeHelper {
         if ((child.getStatus() == Status.PRIVATE) && child == currentUser) {
             familyTree.add(child);
             getChildList(currentUser, child, familyTree, allFamilyMembers);
-        } else if (child.getStatus() == Status.PUBLIC  | child.getStatus() == null) {
+        } else if (child.getStatus() == Status.PUBLIC | child.getStatus() == null) {
             familyTree.add(child);
             getChildList(currentUser, child, familyTree, allFamilyMembers);
         } else if (child.getStatus() == Status.PROTECTED && (isInFamilyTree(currentUser, child)) | isInFamilyTree(child, currentUser)) {

@@ -55,7 +55,7 @@ public class FamilyMemberService {
     }
 
     public List<Node> getFamilyTree(Long idCurrentUser, Long idUserTarget) {
-        if (idCurrentUser==null){
+        if (idCurrentUser == null) {
             FamilyMember test = null;
             return getFamilyTree(test, getById(idUserTarget));
         }
@@ -83,7 +83,7 @@ public class FamilyMemberService {
         return FamilyTreeHelper.isInFamilyTree(user1, user2);
     }
 
-    public FamilyMember getBySocialSecurityNumber(String socialSecurityNumber){
+    public FamilyMember getBySocialSecurityNumber(String socialSecurityNumber) {
         Optional<FamilyMember> fm = repository.findBySocialSecurityNumber(socialSecurityNumber);
         return fm.orElse(null);
     }
@@ -98,112 +98,105 @@ public class FamilyMemberService {
 
         repository.save(familyMember);
     }
+
     @Transactional
-    public void addSpouse(FamilyMember member1, FamilyMember member2){
-        List<FamilyMember>addList=member1.getPids();
+    public void addSpouse(FamilyMember member1, FamilyMember member2) {
+        List<FamilyMember> addList = member1.getPids();
         addList.add(member2);
         member1.setPids(addList);
         repository.save(member1);
-        addList=member2.getPids();
+        addList = member2.getPids();
         addList.add(member1);
         member2.setPids(addList);
         repository.save(member2);
     }
 
     @Transactional
-    public void update(FamilyMember member, UpdateRequest updateRequest){
-        if (member == null){
+    public void update(FamilyMember member, UpdateRequest updateRequest) {
+        if (member == null) {
             FamilyMember fm = new FamilyMember();
-            if (updateRequest.getSocialSecurityNumber()!=null){
+            if (updateRequest.getSocialSecurityNumber() != null) {
                 fm.setSocialSecurityNumber(updateRequest.getSocialSecurityNumber());
             }
-            if (updateRequest.getMid()!=null && getById(updateRequest.getMid())!= null){
+            if (updateRequest.getMid() != null && getById(updateRequest.getMid()) != null) {
+                fm.setMid(getById(updateRequest.getMid()));
+            } else if (updateRequest.getMid() != null && getById(updateRequest.getMid()) != null) {
                 fm.setMid(getById(updateRequest.getMid()));
             }
-            else if (updateRequest.getMid()!=null && getById(updateRequest.getMid())!=null){
-                fm.setMid(getById(updateRequest.getMid()));
-                System.out.println("mon fm et pas le fn" + fm);
-            }
-            if (updateRequest.getFid()!=null && getById(updateRequest.getFid())!=null){
+            if (updateRequest.getFid() != null && getById(updateRequest.getFid()) != null) {
                 fm.setFid(getById(updateRequest.getFid()));
-            }
-            else if (updateRequest.getMid()!=null && getById(updateRequest.getMid())!=null){
+            } else if (updateRequest.getMid() != null && getById(updateRequest.getMid()) != null) {
                 fm.setFid(getById(updateRequest.getFid()));
             }
 
             fm.setGender(Gender.valueOf(updateRequest.getGender()));
-            if(updateRequest.getName() != null){
+            if (updateRequest.getName() != null) {
                 fm.setFirstName(updateRequest.getName().split(" ")[0]);
                 fm.setLastName(updateRequest.getName().split(" ")[1]);
             }
 
-            List<FamilyMember>familyMemberList = new ArrayList<>();
-            for (Long i : updateRequest.getPids()){
+            List<FamilyMember> familyMemberList = new ArrayList<>();
+            for (Long i : updateRequest.getPids()) {
                 familyMemberList.add(getById(i));
 
             }
 
             fm.setPids(familyMemberList);
             repository.save(fm);
-        }
-        else{
+        } else {
 
-            if(updateRequest.getFid()!=null && (member.getFid()==null || member.getFid().getId()!= updateRequest.getFid()) && getById(updateRequest.getFid())!=null){
+            if (updateRequest.getFid() != null && (member.getFid() == null || member.getFid().getId() != updateRequest.getFid()) && getById(updateRequest.getFid()) != null) {
                 member.setFid(getById(updateRequest.getFid()));
-            }
-            else if (updateRequest.getFid()!=null && member.getFid()==null) {
+            } else if (updateRequest.getFid() != null && member.getFid() == null) {
                 FamilyMember dad = new FamilyMember();
                 dad.setGender(Gender.male);
                 repository.save(dad);
                 member.setFid(dad);
             }
-            if(updateRequest.getMid()!=null && (member.getMid()==null || member.getMid().getId()!= updateRequest.getMid()) && getById(updateRequest.getMid())!=null){
+            if (updateRequest.getMid() != null && (member.getMid() == null || member.getMid().getId() != updateRequest.getMid()) && getById(updateRequest.getMid()) != null) {
                 member.setMid(getById(updateRequest.getMid()));
-            }
-            else if (updateRequest.getMid()!=null && member.getMid()==null) {
+            } else if (updateRequest.getMid() != null && member.getMid() == null) {
                 FamilyMember mom = new FamilyMember();
                 mom.setGender(Gender.female);
                 repository.save(mom);
                 member.setMid(mom);
             }
 
-            if(updateRequest.getMid()!=null && getById(updateRequest.getMid())!=null && updateRequest.getFid()!=null && getById(updateRequest.getFid())==null){
+            if (updateRequest.getMid() != null && getById(updateRequest.getMid()) != null && updateRequest.getFid() != null && getById(updateRequest.getFid()) == null) {
                 if (!member.getMid().getPids().isEmpty()) {
                     List temp = getById(updateRequest.getMid()).getPids();
                     temp.remove(getById(updateRequest.getMid()).getPids().size() - 1);
                     getById(updateRequest.getMid()).setPids(temp);
                 }
             }
-            if(updateRequest.getFid()!=null && getById(updateRequest.getFid())!=null && updateRequest.getMid()!=null && getById(updateRequest.getMid())==null){
+            if (updateRequest.getFid() != null && getById(updateRequest.getFid()) != null && updateRequest.getMid() != null && getById(updateRequest.getMid()) == null) {
                 if (!member.getFid().getPids().isEmpty()) {
                     List temp = getById(updateRequest.getFid()).getPids();
                     temp.remove(getById(updateRequest.getFid()).getPids().size() - 1);
                     getById(updateRequest.getFid()).setPids(temp);
                 }
             }
-            if(member.getMid()!=null && member.getFid()!=null){
+            if (member.getMid() != null && member.getFid() != null) {
                 FamilyMember mom = member.getMid();
                 FamilyMember dad = member.getFid();
 
                 mom.addPid(dad);
                 dad.addPid(mom);
             }
-            if (updateRequest.getName()!=null && member.getFullName()!=updateRequest.getName()){
-                System.out.println("voldemort"+updateRequest.getName());
+            if (updateRequest.getName() != null && member.getFullName() != updateRequest.getName()) {
                 member.setFirstName(updateRequest.getName().split(" ")[0]);
                 member.setLastName(updateRequest.getName().split(" ")[1]);
             }
 
-            for (Long i : updateRequest.getPids()){
-                if (i!=null && getById(i)==null){
-                    if(member.getGender()==Gender.male){
+            for (Long i : updateRequest.getPids()) {
+                if (i != null && getById(i) == null) {
+                    if (member.getGender() == Gender.male) {
                         FamilyMember wife = new FamilyMember();
                         wife.setGender(Gender.female);
                         wife.addPid(member);
                         repository.save(wife);
                         member.addPid(wife);
-                    }
-                    else{
+                    } else {
                         FamilyMember husband = new FamilyMember();
                         husband.setGender(Gender.male);
                         husband.addPid(member);
