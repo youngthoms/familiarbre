@@ -1,17 +1,6 @@
 import * as React from 'react';
 import {useEffect, useState} from 'react';
-import {
-    AppstoreOutlined,
-    BarChartOutlined,
-    CloudOutlined,
-    ShopOutlined,
-    TeamOutlined,
-    UploadOutlined,
-    UserOutlined,
-    VideoCameraOutlined,
-} from '@ant-design/icons';
 import {Menu, Layout} from 'antd';
-import type {MenuProps} from 'antd';
 import {
     ContentContainer,
     StyledContent,
@@ -21,22 +10,7 @@ import {
 import MyTree from "../mytree.jsx";
 import {TreeNode} from "../../../types/TreeNode";
 import TreeVisibilityOptions from "./TreeVisibility.component";
-
-
-const items: MenuProps['items'] = [
-    UserOutlined,
-    VideoCameraOutlined,
-    UploadOutlined,
-    BarChartOutlined,
-    CloudOutlined,
-    AppstoreOutlined,
-    TeamOutlined,
-    ShopOutlined,
-].map((icon, index) => ({
-    key: String(index + 1),
-    icon: React.createElement(icon),
-    label: `nav ${index + 1}`,
-}));
+import {NavigationMenu} from "../../../components/NavigationMenu.component";
 
 export const PersonalTree: React.FC = (): React.ReactElement => {
     const [treeData, setTreeData] = useState<TreeNode[]>([]);
@@ -80,8 +54,8 @@ export const PersonalTree: React.FC = (): React.ReactElement => {
     return (
         <Layout hasSider>
             <StyledSider>
-                <div className="demo-logo-vertical"/>
-                <Menu theme="dark" mode="inline" defaultSelectedKeys={['4']} items={items}/>
+                <div className="demo-logo-vertical" />
+                <NavigationMenu/>
             </StyledSider>
             <StyledLayout className="site-layout">
                 <StyledHeader/>
