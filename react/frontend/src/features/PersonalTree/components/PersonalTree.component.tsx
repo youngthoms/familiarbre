@@ -15,10 +15,9 @@ import {NavigationMenu} from "../../../components/NavigationMenu.component";
 export const PersonalTree: React.FC = (): React.ReactElement => {
     const [treeData, setTreeData] = useState<TreeNode[]>([]);
     const [loadingTree, setLoadingTree] = useState(true);
-
+    const userId = localStorage.getItem('userId');
     const loadUserTree = async () => {
         const token = localStorage.getItem('jwtToken');
-        const userId = localStorage.getItem('userId');
 
         if (token && userId) {
             try {
@@ -61,7 +60,7 @@ export const PersonalTree: React.FC = (): React.ReactElement => {
                 <StyledHeader/>
                 <StyledContent>
                     <ContentContainer>
-                        <TreeVisibilityOptions/>
+                        <TreeVisibilityOptions userId={userId}/>
                         {!loadingTree && treeData.length > 0 && (
                             <div style={{height: "100%"}}>
                                 <MyTree nodes={treeData}/>

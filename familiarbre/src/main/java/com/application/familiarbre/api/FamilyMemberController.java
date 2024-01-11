@@ -129,7 +129,6 @@ public class FamilyMemberController {
 
         if (addChildRequest.getMomId() != null) {
             mom = familyMemberService.getById(addChildRequest.getMomId());
-
         }
 
         if (child == null) {
@@ -215,9 +214,22 @@ public class FamilyMemberController {
         return ResponseEntity
                 .status(HttpStatus.CREATED)
                 .body(CreateFamilyMemberResponse
-                                .builder()
-                                .id(fm.getId())
-                                .build()
+                        .builder()
+                        .id(fm.getId())
+                        .build()
+                );
+    }
+
+    @GetMapping("/privacy/{userId}")
+    public ResponseEntity<GetPrivacyValueResponse> getPrivacyValue(@PathVariable Long userId) {
+        FamilyMember familyMember = familyMemberService.getByUserId(userId);
+
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body(GetPrivacyValueResponse
+                        .builder()
+                        .status(familyMember.getStatus().name().toLowerCase())
+                        .build()
                 );
     }
 }
