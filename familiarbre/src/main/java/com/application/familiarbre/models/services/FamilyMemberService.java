@@ -147,6 +147,7 @@ public class FamilyMemberService {
             repository.save(fm);
         }
         else{
+
             if(updateRequest.getFid()!=null && (member.getFid()==null || member.getFid().getId()!= updateRequest.getFid()) && getById(updateRequest.getFid())!=null){
                 member.setFid(getById(updateRequest.getFid()));
             }
@@ -164,6 +165,21 @@ public class FamilyMemberService {
                 mom.setGender(Gender.female);
                 repository.save(mom);
                 member.setMid(mom);
+            }
+
+            if(updateRequest.getMid()!=null && getById(updateRequest.getMid())!=null && updateRequest.getFid()!=null && getById(updateRequest.getFid())==null){
+                if (!member.getMid().getPids().isEmpty()) {
+                    List temp = getById(updateRequest.getMid()).getPids();
+                    temp.remove(getById(updateRequest.getMid()).getPids().size() - 1);
+                    getById(updateRequest.getMid()).setPids(temp);
+                }
+            }
+            if(updateRequest.getFid()!=null && getById(updateRequest.getFid())!=null && updateRequest.getMid()!=null && getById(updateRequest.getMid())==null){
+                if (!member.getFid().getPids().isEmpty()) {
+                    List temp = getById(updateRequest.getFid()).getPids();
+                    temp.remove(getById(updateRequest.getFid()).getPids().size() - 1);
+                    getById(updateRequest.getFid()).setPids(temp);
+                }
             }
             if(member.getMid()!=null && member.getFid()!=null){
                 FamilyMember mom = member.getMid();
