@@ -30,8 +30,7 @@ const useLogin = () => {
             console.log(data);
             localStorage.setItem('jwtToken', data.token);
             localStorage.setItem('userId', data.userId);
-            localStorage.setItem('firstName', data.firstName);
-            localStorage.setItem('lastName', data.lastName);
+            localStorage.setItem('name', data.name);
             navigate('/personaltree');
             console.log("tudo bem");
         } catch (err) {

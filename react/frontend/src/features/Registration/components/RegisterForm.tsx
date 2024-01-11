@@ -138,6 +138,10 @@ const RegisterForm = () => {
                             required: true,
                             message: 'Please input your Social security number',
                         },
+                        {
+                            max: 13,
+                            message: 'Social Security Number cannot be longer than 13 characters',
+                        }
                     ]}
                 >
                     <Input/>

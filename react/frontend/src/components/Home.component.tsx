@@ -1,12 +1,14 @@
-import './Home.css';
-import NavigationLinks from "./NavigationLinks.component";
+import HomeIndex from "./HomeIndex.component";
+// @ts-ignore
+import logo from '../assets/logo.png';
+import {StyledHomeContainer, StyledImg} from "./Home.style"; // Assurez-vous que le chemin est correct
 
 const Home = () => {
     return (
-        <div className="home-container">
-            <img src="src/assets/logo.png" alt="logo" className="logo-form-image"/>
-            <NavigationLinks/>
-        </div>
+        <StyledHomeContainer>
+            <StyledImg src={logo} alt="logo" className="logo-form-image"/>
+            <HomeIndex/>
+        </StyledHomeContainer>
     );
 };
 

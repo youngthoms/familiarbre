@@ -22,6 +22,7 @@ const items = [
 export const NavigationMenu = () => {
     const userName = useGetUserName();
     const navigate = useNavigate(); // Ajout de useNavigate
+    console.log(userName)
 
     const handleMenuClick = ({key}) => {
         switch (key) {
@@ -43,12 +44,12 @@ export const NavigationMenu = () => {
                     left: 0,
                     top: 0,
                     bottom: 0,
-                    backgroundColor: '#1A757E', // Couleur de fond personnalisée pour le Sider
+                    backgroundColor: '#1A757E',
                 }}
             >
                 <div className="demo-logo-vertical"/>
-                <div style={{padding: '16px', textAlign: 'center', color: 'white', backgroundColor: '#1A757E'}}>
-                    My Tree App
+                <div style={{padding: '16px', textAlign: 'center', color: 'white', backgroundColor: '#1A757E', fontSize:'22px'}}>
+                    FamiliArbre
                 </div>
                 <div style={{ padding: '16px', display: 'flex', alignItems: 'center', color: 'white' }}>
                     <UserOutlined style={{ marginRight: '8px' }} />

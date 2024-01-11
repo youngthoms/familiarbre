@@ -19,10 +19,11 @@ function MyTree({ nodes }) {
     useEffect(() => {
         console.log("mon arbre dans MyTree" + JSON.stringify(nodes))
         const tree = new FamilyTree(treeRef.current, {
+            mouseScrool: FamilyTree.action.none,
             nodeTreeMenu: true,
             nodeBinding: {
                 field_0: 'name',
-                field_1: 'id',
+                field_1: 'birthDay',
             },
             nodes: nodes,
             editForm: {
@@ -33,8 +34,9 @@ function MyTree({ nodes }) {
                 addMoreBtn: 'Add element',
                 addMoreFieldName: 'Element name',
                 elements: [
+                    { type: 'textbox', label: 'Full name', binding: 'name' },
                     { type: 'textbox', label: 'Security Social Number', binding: 'socialSecurityNumber' },
-                    { type: 'textbox', label: 'id', binding: 'id' },
+                    { type: 'date', label: 'Birth Date', binding: 'birthDay' },
                 ],
                 buttons: {
                     edit: {
@@ -59,10 +61,7 @@ function MyTree({ nodes }) {
 
         tree.onUpdateNode(async (args) => {
             const formatNodeData = (nodeData) => {
-                console.log(typeof nodeData.id)
                 const idString = typeof nodeData.id === 'string' ? nodeData.id : String(nodeData.id);
-                console.log(typeof idString)
-                console.log("mon parseint", parseInt(idString.substring(0, 8), 16))
                 return {
                     id: convertToLong(nodeData.id),
                     pids: nodeData.pids ? nodeData.pids.map(pid => convertToLong(pid)) : null, // Convertir chaque élément de pids
@@ -76,11 +75,8 @@ function MyTree({ nodes }) {
             if (args.updateNodesData) {
                 for (const nodeData of args.updateNodesData) {
                     const formattedNode = formatNodeData(nodeData);
-                    // console.log("avant le stringify" + nodeData);
                     const url = `${import.meta.env.VITE_BASE_URL}/api/family-members/update/`;
                     try {
-                        console.log("J'envoie ceci au back: " + JSON.stringify(formattedNode));
-                        console.log("le token que j'envoie :" + localStorage.getItem('jwtToken'))
                         const response = await fetch(url, {
                             method: 'POST',
                             headers: {
@@ -103,15 +99,12 @@ function MyTree({ nodes }) {
                     }
                 }
             }
-            // console.log(args.addNodesData);
-            // console.log(args.updateNodesData);
         });
 
         tree.onUpdateNode(async (args) => {
 
             if(args.addNodesData){
                 await new Promise(r => setTimeout(r, 1000));
-                console.log("les objets que je parcours" + JSON.stringify(args.addNodesData))
                 for(const nodeData of args.addNodesData){
                     if(nodeData.fid != null && nodeData.mid != null){
                         const momId = convertToLong(nodeData.mid);
@@ -119,11 +112,6 @@ function MyTree({ nodes }) {
                         const childId = convertToLong(nodeData.id);
                         const url = `${import.meta.env.VITE_BASE_URL}/api/family-members/child/add`;
                         try {
-                            console.log("J'envoie ceci au back pour le fils: " + JSON.stringify({
-                                momId: momId,
-                                dadId: dadId,
-                                childid: childId,
-                            }));
                             const response = await fetch(url, {
                                 method: 'POST',
                                 headers: {
@@ -141,7 +129,6 @@ function MyTree({ nodes }) {
                             if (response.ok && response.headers.get('Content-Type')?.includes('application/json')) {
                                 const responseData = await response.json();
                                 console.log("Mise à jour de la relation réussie :", responseData);
-                                // window.location.reload();
                             } else {
                                 const textResponse = await response.text();
                                 throw new Error(textResponse || 'Failed to update');
@@ -152,11 +139,8 @@ function MyTree({ nodes }) {
                         }
                     }
                 }
-                console.log("j'ajoute ce node" + JSON.stringify(args.addNodesData));
             }
         });
-
-
 
         return () => {
             if (familyRef.current) {

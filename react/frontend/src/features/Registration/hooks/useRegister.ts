@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import {useNavigate} from "react-router-dom";
 
 interface SignUpFormData {
     email: string;
@@ -13,6 +14,7 @@ interface SignUpFormData {
 const useRegister = () => {
     const [isLoading, setIsLoading] = useState<boolean>(false);
     const [error, setError] = useState<string | null>(null);
+    const navigate = useNavigate(); // Ajout de useNavigate
 
     const signUp = async (formData: SignUpFormData) => {
         setIsLoading(true);
@@ -28,7 +30,11 @@ const useRegister = () => {
             if (!response.ok) {
                 throw new Error('Failed to sign up');
             }
-            // Tu peux traiter la réponse ici si nécessaire
+            const data = await response.json();
+            localStorage.setItem('jwtToken', data.token);
+            localStorage.setItem('userId', data.userId);
+            localStorage.setItem('name', data.name);
+            navigate('/personaltree');
         } catch (err) {
             // @ts-ignore
             setError(err.message);

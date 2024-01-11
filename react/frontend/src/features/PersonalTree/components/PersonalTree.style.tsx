@@ -33,3 +33,7 @@ export const ContentContainer = styled.div`
   text-align: center;
   background: #ffffff;
 `;
+
+export const StyledDiv = styled.div`
+  height: 100%;
+`;
