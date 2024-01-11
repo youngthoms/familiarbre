@@ -1,6 +1,6 @@
 import * as React from 'react';
 import {useEffect, useState} from 'react';
-import {Menu, Layout} from 'antd';
+import {Layout} from 'antd';
 import {
     ContentContainer,
     StyledContent,
@@ -34,10 +34,6 @@ export const PersonalTree: React.FC = (): React.ReactElement => {
                 }
                 const tree = await response.json();
                 setTreeData(tree);
-                console.log("mon arbre" + JSON.stringify(tree));
-                console.log("COUCOU !!");
-                console.log("TRIPLE MOOOOOONSTRE !!");
-                console.log(treeData)
             } catch (error) {
                 console.error('Failed to fetch tree:', error);
             } finally {

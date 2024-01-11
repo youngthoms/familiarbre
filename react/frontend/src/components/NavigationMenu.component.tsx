@@ -22,6 +22,7 @@ const items = [
 export const NavigationMenu = () => {
     const userName = useGetUserName();
     const navigate = useNavigate(); // Ajout de useNavigate
+    console.log(userName)
 
     const handleMenuClick = ({key}) => {
         switch (key) {
