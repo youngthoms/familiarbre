@@ -3,11 +3,11 @@ import {useEffect, useState} from 'react';
 import {Layout} from 'antd';
 import {
     ContentContainer,
-    StyledContent,
+    StyledContent, StyledDiv,
     StyledHeader, StyledLayout,
     StyledSider
 } from "./PersonalTree.style";
-import MyTree from "../mytree.jsx";
+import MyTree from "../../MyTree/components/mytree.component.jsx";
 import {TreeNode} from "../../../types/TreeNode";
 import TreeVisibilityOptions from "./TreeVisibility.component";
 import {NavigationMenu} from "../../../components/NavigationMenu.component";
@@ -58,9 +58,9 @@ export const PersonalTree: React.FC = (): React.ReactElement => {
                     <ContentContainer>
                         <TreeVisibilityOptions userId={userId}/>
                         {!loadingTree && treeData.length > 0 && (
-                            <div style={{height: "100%"}}>
+                            <StyledDiv>
                                 <MyTree nodes={treeData}/>
-                            </div>
+                            </StyledDiv>
                         )}
                     </ContentContainer>
                 </StyledContent>

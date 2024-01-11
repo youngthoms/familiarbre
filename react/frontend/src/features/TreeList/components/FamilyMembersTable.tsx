@@ -2,14 +2,7 @@ import {useState, useEffect} from 'react';
 import {Table} from 'antd';
 import {NavigationMenu} from "../../../components/NavigationMenu.component";
 import * as React from "react";
-
-type FamilyMember = {
-    id: number;
-    fullName: string;
-    gender: string;
-    status: string;
-};
-
+import {FamilyMember} from "../type/FamilyMember.type";
 
 const FamilyMembersTable: React.FC = () => {
     const [familyMembers, setFamilyMembers] = useState<FamilyMember[]>([]);

@@ -5,4 +5,5 @@ export interface TreeNode {
     fid?: string | number;
     name: string;
     securitySocialNumber: string;
+    birthDay?: string;
 }

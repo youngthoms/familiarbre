@@ -23,6 +23,7 @@ function MyTree({ nodes }) {
             nodeTreeMenu: true,
             nodeBinding: {
                 field_0: 'name',
+                field_1: 'birthDay',
             },
             nodes: nodes,
             editForm: {
@@ -35,6 +36,7 @@ function MyTree({ nodes }) {
                 elements: [
                     { type: 'textbox', label: 'Full name', binding: 'name' },
                     { type: 'textbox', label: 'Security Social Number', binding: 'socialSecurityNumber' },
+                    { type: 'date', label: 'Birth Date', binding: 'birthDay' },
                 ],
                 buttons: {
                     edit: {

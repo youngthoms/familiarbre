@@ -44,7 +44,7 @@ export const NavigationMenu = () => {
                     left: 0,
                     top: 0,
                     bottom: 0,
-                    backgroundColor: '#1A757E', // Couleur de fond personnalisée pour le Sider
+                    backgroundColor: '#1A757E',
                 }}
             >
                 <div className="demo-logo-vertical"/>

@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import {Layout, Menu} from "antd";
+import {Menu} from "antd";
 
 export const StyledMenu = styled(Menu)`
   background-color: #1A757E; // Définit la couleur de fond du menu

@@ -1,7 +1,7 @@
 import * as React from 'react';
 import {useEffect, useState} from 'react';
 import {Layout} from 'antd';
-import MyTree from "../../PersonalTree/mytree.jsx";
+import MyTree from "../../MyTree/components/mytree.component.jsx";
 import {TreeNode} from "../../../types/TreeNode";
 import {useParams} from "react-router-dom";
 import {
