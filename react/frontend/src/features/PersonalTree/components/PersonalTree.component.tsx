@@ -15,7 +15,6 @@ import {NavigationMenu} from "../../../components/NavigationMenu.component";
 export const PersonalTree: React.FC = (): React.ReactElement => {
     const [treeData, setTreeData] = useState<TreeNode[]>([]);
     const [loadingTree, setLoadingTree] = useState(true);
-    const { id } = useParams<{ id: string }>();
 
     const loadUserTree = async () => {
         const token = localStorage.getItem('jwtToken');
