@@ -48,8 +48,8 @@ export const NavigationMenu = () => {
                 }}
             >
                 <div className="demo-logo-vertical"/>
-                <div style={{padding: '16px', textAlign: 'center', color: 'white', backgroundColor: '#1A757E'}}>
-                    My Tree App
+                <div style={{padding: '16px', textAlign: 'center', color: 'white', backgroundColor: '#1A757E', fontSize:'22px'}}>
+                    FamiliArbre
                 </div>
                 <div style={{ padding: '16px', display: 'flex', alignItems: 'center', color: 'white' }}>
                     <UserOutlined style={{ marginRight: '8px' }} />

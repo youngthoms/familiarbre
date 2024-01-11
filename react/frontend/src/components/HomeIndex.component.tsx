@@ -1,6 +1,7 @@
 import {Link, useLocation} from "react-router-dom";
+import FamilyMembersTable from "../features/TreeList/components/FamilyMembersTable";
 
-const NavigationLinks = () => {
+const HomeIndex = () => {
     const location = useLocation();
 
     if (location.pathname !== '/') {
@@ -14,8 +15,9 @@ const NavigationLinks = () => {
                 <Link to="/register" className="nav-link">Register</Link>
                 <Link to="/login" className="nav-link">Login</Link>
             </nav>
+            <FamilyMembersTable/>
         </div>
     )
 }
 
-export default NavigationLinks;
+export default HomeIndex;

@@ -8,8 +8,9 @@ import {
     ContentContainer,
     StyledContent,
     StyledHeader,
-    StyledLayout,
-} from "../../PersonalTree/components/PersonalTree.style.tsx";
+    StyledLayout, StyledSider,
+} from "../../PersonalTree/components/PersonalTree.style";
+import {NavigationMenu} from "../../../components/NavigationMenu.component";
 
 
 export const PublicTree: React.FC = (): JSX.Element => {
@@ -44,6 +45,10 @@ export const PublicTree: React.FC = (): JSX.Element => {
 
     return (
         <Layout hasSider>
+            <StyledSider>
+                <div className="demo-logo-vertical" />
+                <NavigationMenu/>
+            </StyledSider>
             <StyledLayout className="site-layout">
                 <StyledHeader/>
                 <StyledContent>
