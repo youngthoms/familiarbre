@@ -70,6 +70,7 @@ function MyTree({ nodes }) {
                     name: nodeData.name || null,
                     socialSecurityNumber: nodeData.socialSecurityNumber || 'null',
                     gender: nodeData.gender,
+                    birthDay: nodeData.birthDay || null,
                 };
             };
             if (args.updateNodesData) {

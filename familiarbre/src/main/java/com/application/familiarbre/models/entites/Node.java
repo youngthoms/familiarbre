@@ -1,12 +1,12 @@
 package com.application.familiarbre.models.entites;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 @Getter
 @Setter
 @AllArgsConstructor
+@Builder
+@NoArgsConstructor
 public class Node {
     private Long id;
     private Long mid;

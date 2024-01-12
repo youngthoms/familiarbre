@@ -17,4 +17,5 @@ public class UpdateRequest {
     Long []pids;
     String socialSecurityNumber;
     Long id;
+    private String birthDay;
 }

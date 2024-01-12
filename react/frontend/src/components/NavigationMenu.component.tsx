@@ -3,6 +3,7 @@ import { Layout, Menu } from 'antd';
 import {StyledMenu} from "./NavigationMenu.style";
 import {useNavigate} from "react-router-dom";
 import {useGetUserName} from "../hooks/useGetUserName";
+import './NavigationMenuComponent.css';
 
 const { Header, Content, Footer, Sider } = Layout;
 
@@ -48,7 +49,7 @@ export const NavigationMenu = () => {
             >
                 <div className="demo-logo-vertical"/>
                 <div style={{padding: '16px', textAlign: 'center', color: 'white', backgroundColor: '#1A757E', fontSize:'22px'}}>
-                    FamiliArbre
+                    <a href={"/"} className={"link"}>FamiliArbre</a>
                 </div>
                 <div style={{ padding: '16px', display: 'flex', alignItems: 'center', color: 'white' }}>
                     <UserOutlined style={{ marginRight: '8px' }} />

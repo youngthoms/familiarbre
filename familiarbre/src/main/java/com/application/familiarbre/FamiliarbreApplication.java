@@ -32,7 +32,7 @@ public class FamiliarbreApplication {
                     .password("password")
                     .gender(Gender.male)
                     .firstName("Sam")
-                    .lastName("Femal")
+                    .lastName("Sung")
                     .socialSecurityNumber("0102030405")
                     .birthDay("01/01/2000")
                     .build();
@@ -47,8 +47,8 @@ public class FamiliarbreApplication {
                         .email("user2@mail.com")
                         .password("password")
                         .gender(Gender.female)
-                        .firstName("Sam")
-                        .lastName("Lebrise")
+                        .firstName("Luc")
+                        .lastName("Sung")
                         .socialSecurityNumber("0201030405")
                         .birthDay("02/01/2000")
                         .build();

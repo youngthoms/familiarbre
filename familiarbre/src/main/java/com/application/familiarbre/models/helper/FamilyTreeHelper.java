@@ -26,21 +26,47 @@ public class FamilyTreeHelper {
                     pidsList.add(j.getId());
                     Long[] iIdArray = new Long[]{i.getId()};
                     Date birthdayDate = j.getBirthDay();
+
                     String birthday = "";
                     if (birthdayDate != null) {
                         birthday = birthdayDate.toString();
                     }
-                    tree.add(new Node(j.getId(), null, iIdArray, null, j.getFullName(), j.getGender(), j.getSocialSecurityNumber(), birthday));
+
+                    tree.add(
+                            Node.builder()
+                                    .id(j.getId())
+                                    .mid(null)
+                                    .pids(iIdArray)
+                                    .fid(null)
+                                    .name(j.getFullName())
+                                    .gender(j.getGender())
+                                    .socialSecurityNumber(j.getSocialSecurityNumber())
+                                    .birthDay(birthday)
+                                    .build()
+                    );
                 }
             }
 
             Long[] iPids = pidsList.toArray(new Long[0]);
             Date birthdayDate = i.getBirthDay();
+
             String birthday = "";
             if (birthdayDate != null) {
                 birthday = birthdayDate.toString();
             }
-            tree.add(new Node(i.getId(), midId, iPids, fidId, i.getFullName(), i.getGender(), i.getSocialSecurityNumber(), birthday));
+
+            tree.add(
+                    Node.builder()
+                            .id(i.getId())
+                            .mid(midId)
+                            .pids(iPids)
+                            .fid(fidId)
+                            .name(i.getFullName())
+                            .gender(i.getGender())
+                            .socialSecurityNumber(i.getSocialSecurityNumber())
+                            .birthDay(birthday)
+                            .build()
+            );
         }
         return tree;
     }

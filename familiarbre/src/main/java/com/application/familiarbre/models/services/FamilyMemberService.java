@@ -10,6 +10,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.lang.reflect.Array;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -111,6 +113,12 @@ public class FamilyMemberService {
         repository.save(member2);
     }
 
+    public java.sql.Date parseDate(String dateString) {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+        LocalDate localDate = LocalDate.parse(dateString, formatter);
+        return java.sql.Date.valueOf(localDate);
+    }
+
     @Transactional
     public void update(FamilyMember member, UpdateRequest updateRequest) {
         if (member == null) {
@@ -144,7 +152,9 @@ public class FamilyMemberService {
             fm.setPids(familyMemberList);
             repository.save(fm);
         } else {
-
+            if (updateRequest.getBirthDay() != null) {
+                member.setBirthDay(parseDate(updateRequest.getBirthDay()));
+            }
             if (updateRequest.getFid() != null && (member.getFid() == null || member.getFid().getId() != updateRequest.getFid()) && getById(updateRequest.getFid()) != null) {
                 member.setFid(getById(updateRequest.getFid()));
             } else if (updateRequest.getFid() != null && member.getFid() == null) {
