@@ -53,7 +53,6 @@ export const PersonalTree: React.FC = (): React.ReactElement => {
                 <NavigationMenu/>
             </StyledSider>
             <StyledLayout className="site-layout">
-                <StyledHeader/>
                 <StyledContent>
                     <ContentContainer>
                         <TreeVisibilityOptions userId={userId}/>

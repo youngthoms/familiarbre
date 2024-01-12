@@ -6,6 +6,7 @@ import LoginForm from "./features/SignIn/components/LoginForm.tsx";
 import Home from "./components/Home.component.tsx";
 import PublicTreeComponent from "./features/PublicTree/components/PublicTree.component.tsx";
 import FamilyMembersTable from "./features/TreeList/components/FamilyMembersTable.tsx";
+import SearchFamilyTree from "./features/SearchBarPublicTree/components/SearchFamilyTree.component.tsx";
 
 
 function App() {
@@ -22,7 +23,7 @@ function App() {
                     <Route path="/login" element={<LoginForm/>}/>
                     <Route path="/personaltree" element={<PersonalTreeComponent />}/> {/* Keep the existing route without id */}
                     <Route path="/publictree/:id" element={<PublicTreeComponent/>}/>
-                    <Route path="/search-tree" element={<FamilyMembersTable/>}/>
+                    <Route path="/search-tree" element={<SearchFamilyTree/>}/>
                     {/* Ajoute ici la route vers ton composant de connexion */}
                 </Routes>
             </div>

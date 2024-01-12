@@ -13,6 +13,6 @@ export const StyledMenu = styled(Menu)`
 
 
   .ant-menu-item-selected {
-    background-color: #275E6E; // Change la couleur de fond pour l'élément sélectionné
+    background-color: #1A757E; // Change la couleur de fond pour l'élément sélectionné
   }
 `;

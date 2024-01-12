@@ -7,7 +7,7 @@ export const StyledSider = styled(Layout.Sider)`
   overflow: auto;
   height: 100vh;
   position: fixed;
-  left: 0;
+  //left: 0;
   top: 0;
   bottom: 0;
 `;
@@ -21,6 +21,9 @@ export const StyledLayout = styled(Layout)`
 export const StyledHeader = styled(Header)`
   padding: 0;
   background: #ffffff;
+  display: flex;
+  justify-content: center; // Centrer horizontalement
+  align-items: center; // Centrer verticalement
 `;
 
 export const StyledContent = styled(Layout.Content)`
